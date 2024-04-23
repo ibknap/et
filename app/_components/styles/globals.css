@@ -35,7 +35,7 @@ html,
 .form-select:focus,
 .form-select:active {
   outline: 0;
-  border: 0.5px solid #1069e5;
+  border: 0.5px solid #2873BA;
   background: #f3f7fd;
   box-shadow: 0px 0px 0px 3px #e8f0fd, 0px 1px 2px 0px rgba(0, 0, 0, 0.05) !important;
 }
@@ -60,7 +60,6 @@ html,
 }
 
 .email-sub-input {
-  padding-left: 45px !important;
   padding-right: 45px !important;
 }
 
@@ -350,7 +349,11 @@ img {
   pointer-events: none;
 }
 
-/* text */
+/* text & bg */
 .text-primary {
   color: #364d65 !important;
+}
+
+.bg-primary {
+  background: #2873BA !important;
 }
