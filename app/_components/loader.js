@@ -1,12 +1,10 @@
 "use client";
 
-import logo from "@/public/logos/logo.svg";
-import logoWhite from "@/public/logos/logo_white.svg";
+import logo from "@/public/logos/logo_loader.svg";
 import Image from "next/image";
 
 const Loader = ({
-  size = 24,
-  color = "white",
+  size = 125,
   isAwait = false,
   fullHeight = false,
   className = "",
@@ -16,7 +14,7 @@ const Loader = ({
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
         <Image
-          src={color === "white" ? logoWhite : logo}
+          src={logo}
           width={size}
           priority={true}
           alt="logo"

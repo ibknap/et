@@ -12,7 +12,7 @@ import {
   pageURL,
 } from "@/app/_components/seo";
 
-const inter = Inter({ subsets: ["latin"], weight: "500" });
+const inter = Inter({ subsets: ["latin"] });
 
 // metadata
 export const metadata = {

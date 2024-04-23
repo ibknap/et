@@ -5,7 +5,7 @@ const Loading = () => (
   <div className="container d-flex justify-content-center align-items-center vh-100">
     <div className="row">
       <div className="col-12 text-center">
-        <Image src={logo} width={50} priority alt="logo" />
+        <Image src={logo} width={150} priority alt="loading" />
       </div>
     </div>
   </div>
