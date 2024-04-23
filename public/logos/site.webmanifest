@@ -1,0 +1,14 @@
+{
+  "name": "Exclusive Travel - Lives your dream vacation with exclusive travel",
+  "short_name": "Exclusive Travel",
+  "icons": [
+    {
+      "src": "/logos/favicon.png",
+      "sizes": "120x120",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#2873BA",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}
