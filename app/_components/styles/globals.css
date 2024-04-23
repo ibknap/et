@@ -14,9 +14,9 @@ html,
 }
 
 .cus-form-control {
-  border-radius: 21px;
-  border: 0.5px solid #d0d5dd;
-  background: #fff;
+  border-radius: 16px;
+  border: none !important;
+  background: #EAF1F8;
   display: flex;
   height: 56px;
   padding: 10px 14px;
@@ -354,6 +354,16 @@ img {
   color: #364d65 !important;
 }
 
+.text-light-primary {
+  color: #2873BA !important;
+}
+
+
 .bg-primary {
   background: #2873BA !important;
+}
+
+
+.text-accent {
+  color: #44B1B4 !important;
 }

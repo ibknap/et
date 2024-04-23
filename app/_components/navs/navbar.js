@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="navbar navbar-expand-md navbar-dark bg-primary pt-3 pb-2 p-0">
+    <nav className="navbar navbar-expand-md navbar-dark bg-primary pt-3 pb-2 p-0 border-0">
       <div className="container d-flex justify-content-between align-items-center">
         <Link href="/" className="navbar-brand">
           <Image src={logo} alt="al gendini!" height={50} priority />
