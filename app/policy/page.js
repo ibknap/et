@@ -12,7 +12,7 @@ export default function Policy() {
             <h1 className="display-6">Privacy Policy</h1>
 
             <p>
-              Welcome to Exclusive Travel's Privacy Policy. Your privacy is
+              Welcome to Exclusive Travel&apos;s Privacy Policy. Your privacy is
               important to us, and we are committed to protecting your personal
               information. This policy outlines how we collect, use, disclose,
               and safeguard your data when you use our mobile application or
@@ -95,7 +95,7 @@ export default function Policy() {
               of these sites before providing any personal information.
             </p>
 
-            <h5>7. Children's Privacy</h5>
+            <h5>7. Children&apos;s Privacy</h5>
             <p>
               Exclusive Travel is not intended for individuals under the age of
               18. We do not knowingly collect personal information from
