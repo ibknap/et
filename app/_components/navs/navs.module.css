@@ -41,3 +41,16 @@
     width: 50% !important;
   }
 }
+
+.bg_bottom {
+  background: #eaf1f8;
+}
+
+.text_bottom {
+  color: #8C98A6;
+}
+
+
+.text_bottom_active {
+  color: #04203e;
+}

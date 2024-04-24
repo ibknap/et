@@ -1,5 +1,6 @@
 import Navbar from "@/app/_components/navs/navbar";
 import Footer from "@/app/_components/navs/footer";
+import BottomNavbar from "@/app/_components/navs/bottom_navbar";
 
 export default function Policy() {
   return (
@@ -116,6 +117,7 @@ export default function Policy() {
       </div>
 
       <Footer />
+      <BottomNavbar />
     </>
   );
 }

@@ -2,6 +2,7 @@
 
 import Navbar from "@/app/_components/navs/navbar";
 import Footer from "@/app/_components/navs/footer";
+import BottomNavbar from "@/app/_components/navs/bottom_navbar";
 import OnBoard from "@/app/_components/onboard";
 import { useEffect, useState } from "react";
 import FlightSearchBox from "@/app/_components/flight/search_box";
@@ -27,7 +28,9 @@ const Home = () => {
 
       <FlightSearchBox />
       <div className="vh-100" />
+
       <Footer />
+      <BottomNavbar />
     </>
   );
 };

@@ -5,6 +5,7 @@ import profileImg from "@/public/images/profile.png";
 import edit from "@/public/icons/edit.svg";
 import Navbar from "@/app/_components/navs/navbar";
 import Footer from "@/app/_components/navs/footer";
+import BottomNavbar from "@/app/_components/navs/bottom_navbar";
 import { useState } from "react";
 import Loader from "@/app/_components/loader";
 
@@ -161,6 +162,7 @@ const Profile = () => {
       </div>
 
       <Footer />
+      <BottomNavbar />
     </>
   );
 };

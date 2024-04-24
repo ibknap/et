@@ -1,5 +1,6 @@
 import Navbar from "@/app/_components/navs/navbar";
 import Footer from "@/app/_components/navs/footer";
+import BottomNavbar from "@/app/_components/navs/bottom_navbar";
 
 export default function Terms() {
   return (
@@ -87,6 +88,7 @@ export default function Terms() {
       </div>
 
       <Footer />
+      <BottomNavbar />
     </>
   );
 }
