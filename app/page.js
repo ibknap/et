@@ -4,6 +4,7 @@ import Navbar from "@/app/_components/navs/navbar";
 import Footer from "@/app/_components/navs/footer";
 import OnBoard from "@/app/_components/onboard";
 import { useEffect, useState } from "react";
+import FlightSearchBox from "@/app/_components/flight/search_box";
 
 const Home = () => {
   const [show, setShow] = useState(false);
@@ -24,6 +25,7 @@ const Home = () => {
 
       {show && <OnBoard showState={true} onHide={() => setShow(false)} />}
 
+      <FlightSearchBox />
       <div className="vh-100" />
       <Footer />
     </>

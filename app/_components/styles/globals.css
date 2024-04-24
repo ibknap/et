@@ -1,6 +1,7 @@
 html,
-* {
-  color: #364d65 !important;
+*,
+body {
+  color: #364d65;
 }
 
 /* forms */

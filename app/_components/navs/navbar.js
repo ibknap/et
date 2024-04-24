@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function Navbar() {
-  const [auth, setAuth] = useState(true);
+  const [auth, setAuth] = useState(false);
 
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-primary pt-3 pb-2 p-0 border-0">
