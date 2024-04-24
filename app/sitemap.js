@@ -1,4 +1,4 @@
-const domain = "https://www.exclusivetravel.com/";
+const domain = "https://exclusivetravel.vercel.app/";
 
 const sitemap = () => [
   {

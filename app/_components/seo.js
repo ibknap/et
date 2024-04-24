@@ -1,4 +1,4 @@
-export const pageURL = "https://www.exclusivetravel.com/";
+export const pageURL = "https://exclusivetravel.vercel.app/";
 
 export const pageTitle =
   "Exclusive Travel - Lives your dream vacation with exclusive travel";

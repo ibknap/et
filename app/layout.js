@@ -67,7 +67,7 @@ const lBSchema = getLBSchema(
   "+2347069138882",
   "musamuazu592@gmail.com",
   pageURL,
-  `${pageURL}/logos/logo_dark.png`,
+  `${pageURL}logos/logo_dark.png`,
   "Cash, Credit Card, Transfer",
   "LIRA, USD, EURO",
   "Mo-Fr 09:00-17:00",
