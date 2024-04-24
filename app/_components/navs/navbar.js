@@ -2,7 +2,8 @@
 
 import styles from "@/app/_components/navs/navs.module.css";
 import logo from "@/public/logos/logo_long.svg";
-import { Menu } from "iconsax-react";
+import menu from "@/public/icons/menu.svg";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -18,7 +19,7 @@ export default function Navbar() {
         </Link>
 
         <button
-          className="navbar-toggler"
+          className="navbar-toggler border-0"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarCollapse"
@@ -26,7 +27,7 @@ export default function Navbar() {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <Menu color="white" />
+          <Image src={menu} alt="menu" height={30} priority />
         </button>
 
         <div className="collapse navbar-collapse" id="navbarCollapse">
