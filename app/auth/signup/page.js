@@ -20,7 +20,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
+    <div className="container d-flex justify-content-center align-items-center min-vh-100 my-5">
       <div className="row justify-content-center">
         <div className="col-md-6 px-4 px-md-0 text-start">
           <Link href="/">

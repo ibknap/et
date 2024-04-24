@@ -1,6 +1,6 @@
 html,
 * {
-  color: #364d65;
+  color: #364d65 !important;
 }
 
 /* forms */
@@ -16,7 +16,7 @@ html,
 .cus-form-control {
   border-radius: 16px;
   border: none !important;
-  background: #EAF1F8;
+  background: #eaf1f8;
   display: flex;
   height: 56px;
   padding: 10px 14px;
@@ -35,7 +35,7 @@ html,
 .form-select:focus,
 .form-select:active {
   outline: 0;
-  border: 0.5px solid #2873BA;
+  border: 0.5px solid #2873ba;
   background: #f3f7fd;
   box-shadow: 0px 0px 0px 3px #e8f0fd, 0px 1px 2px 0px rgba(0, 0, 0, 0.05) !important;
 }
@@ -355,15 +355,17 @@ img {
 }
 
 .text-light-primary {
-  color: #2873BA !important;
+  color: #2873ba !important;
 }
-
 
 .bg-primary {
-  background: #2873BA !important;
+  background: #2873ba !important;
 }
 
-
 .text-accent {
-  color: #44B1B4 !important;
+  color: #44b1b4 !important;
+}
+
+.min-vh-100 {
+  min-height: 100hv;
 }

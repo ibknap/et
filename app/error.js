@@ -8,7 +8,7 @@ const GlobalError = ({ _, reset }) => {
     <div className="container d-flex justify-content-center align-items-center vh-100">
       <div className="row justify-content-center">
         <div className="col-12 text-center">
-          <Image src={errorImg} width={327} priority alt="error" />
+          <Image src={errorImg} width={250} priority alt="error" />
 
           <button
             onClick={() => reset()}

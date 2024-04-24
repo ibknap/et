@@ -14,8 +14,29 @@
   text-decoration: none;
 }
 
+.btn_danger {
+  background: #dc3545 !important;
+  color: #ffffff !important;
+  height: 38px;
+  display: flex;
+  padding: 4px 24px;
+  border-radius: 8px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  font-size: 14px;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
 @media (max-width: 768px) {
   .btn {
+    margin-top: 0.5rem;
+    width: 50% !important;
+  }
+
+  .btn_danger {
     margin-top: 0.5rem;
     width: 50% !important;
   }
