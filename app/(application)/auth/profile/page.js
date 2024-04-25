@@ -113,7 +113,7 @@ const Profile = () => {
                       onChange={(e) => setFirstName(e.target.value)}
                     />
 
-                    <label className="form-label" htmlFor="lastName">
+                    <label className="form-label" htmlFor="firstName">
                       Last Name
                     </label>
                   </div>

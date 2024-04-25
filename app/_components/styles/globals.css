@@ -16,7 +16,7 @@ body {
 
 .cus-form-control {
   border-radius: 16px;
-  border: none !important;
+  border: none;
   background: #eaf1f8;
   display: flex;
   height: 56px;
