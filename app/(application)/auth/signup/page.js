@@ -16,7 +16,6 @@ const SignUp = () => {
   const onSignup = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(firstName, lastName, email, password);
   };
 
   return (
@@ -43,7 +42,7 @@ const SignUp = () => {
                       required
                       className="form-control cus-form-control"
                       id="firstName"
-                      placeholder="john"
+                      placeholder="John"
                       onChange={(e) => setFirstName(e.target.value)}
                     />
 
@@ -75,7 +74,7 @@ const SignUp = () => {
                       required
                       className="form-control cus-form-control"
                       id="lastName"
-                      placeholder="john"
+                      placeholder="John"
                       onChange={(e) => setLastName(e.target.value)}
                     />
 

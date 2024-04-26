@@ -25,7 +25,6 @@ const Profile = () => {
   const onUpdateProfile = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(firstName, lastName, dob, email, phoneNumber, gender);
   };
 
   const onUpdateAvatar = () => {
@@ -109,7 +108,7 @@ const Profile = () => {
                       required
                       className="form-control cus-form-control"
                       id="firstName"
-                      placeholder="john"
+                      placeholder="John"
                       onChange={(e) => setFirstName(e.target.value)}
                     />
 
@@ -124,7 +123,7 @@ const Profile = () => {
                       required
                       className="form-control cus-form-control"
                       id="lastName"
-                      placeholder="john"
+                      placeholder="Doe"
                       onChange={(e) => setLastName(e.target.value)}
                     />
 
@@ -139,7 +138,7 @@ const Profile = () => {
                       required
                       className="form-control cus-form-control"
                       id="dob"
-                      placeholder="john"
+                      placeholder="Date Of Birth"
                       onChange={(e) => setDob(e.target.value)}
                     />
 
@@ -169,7 +168,7 @@ const Profile = () => {
                       required
                       className="form-control cus-form-control"
                       id="phoneNumber"
-                      placeholder="john"
+                      placeholder="Phone Number"
                       onChange={(e) => setPhoneNumber(e.target.value)}
                     />
 

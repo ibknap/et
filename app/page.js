@@ -5,7 +5,7 @@ import Footer from "@/app/_components/navs/footer";
 import BottomNavbar from "@/app/_components/navs/bottom_navbar";
 import OnBoard from "@/app/_components/onboard";
 import { useEffect, useState } from "react";
-import FlightSearchBox from "@/app/_components/flight/search_box";
+import FlightSearchBox from "@/app/_components/flight/flight_search_box";
 
 const Home = () => {
   const [show, setShow] = useState(false);

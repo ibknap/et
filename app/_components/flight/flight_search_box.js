@@ -6,11 +6,13 @@ import hotel from "@/public/icons/hotel_white.svg";
 import plane from "@/public/icons/plane_white.svg";
 import { usePathname } from "next/navigation";
 import { SearchNormal1 } from "iconsax-react";
+import FlightSearchModal from "@/app/_components/flight/flight_search_modal";
+import { useState } from "react";
 
 const FlightSearchBox = () => {
   const path = usePathname();
+  const [show, setShow] = useState(false);
 
-  console.log(path);
   return (
     <main>
       <section className="bg-primary pt-4">
@@ -54,7 +56,7 @@ const FlightSearchBox = () => {
           <div className="row justify-content-center">
             <div className="col-sm-6">
               <div
-                onClick={() => {}}
+                onClick={() => setShow(true)}
                 className="shadow d-flex justify-content-between form-control cus-form-control border border-3 border-warning pe-active"
               >
                 <span className="fw-light">Search For Flights</span>
@@ -64,6 +66,8 @@ const FlightSearchBox = () => {
           </div>
         </div>
       </section>
+
+      <FlightSearchModal showState={show} onHide={() => setShow(false)} />
     </main>
   );
 };

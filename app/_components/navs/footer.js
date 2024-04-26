@@ -13,7 +13,6 @@ export default function Footer() {
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    console.log(email);
   };
 
   return (

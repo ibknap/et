@@ -14,7 +14,6 @@ const SignIn = () => {
   const onSignin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(email, password);
   };
 
   return (

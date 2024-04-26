@@ -13,7 +13,6 @@ const ForgorPassword = () => {
   const onForgorPassword = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(email);
   };
 
   return (
