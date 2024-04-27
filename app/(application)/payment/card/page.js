@@ -12,11 +12,10 @@ import Image from "next/image";
 
 export default function FlightCard() {
   const [isLoading, setIsLoading] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [dob, setDob] = useState("");
-  const [email, setEmail] = useState("");
-  const [title, setTitle] = useState("Mr");
+  const [holder, setHolder] = useState("");
+  const [number, setNumber] = useState("");
+  const [date, setDate] = useState("");
+  const [cvv, setCvv] = useState("");
   const router = useRouter();
 
   const onProceed = async (e) => {
@@ -48,81 +47,94 @@ export default function FlightCard() {
               <Image
                 src={master}
                 width={57}
-                priorite
+                priority
                 alt="master"
                 className="img-responsive"
               />
             </div>
 
-            <form onSubmit={onProceed}>
-              <div className="form-floating my-4">
+            <form
+              onSubmit={onProceed}
+              id="form"
+              className="border rounded-4 mt-3 p-3"
+            >
+              <div className="mb-4">
+                <label className="form-label" htmlFor="holder">
+                  Card Holder Name
+                </label>
+
                 <input
                   type="text"
                   required
-                  className="form-control cus-form-control"
-                  id="firstName"
-                  placeholder="John"
-                  onChange={(e) => setFirstName(e.target.value)}
+                  className="form-control cus-form-control transparent rounded-0 border-0 border-bottom"
+                  id="holder"
+                  placeholder="John Doe"
+                  onChange={(e) => setHolder(e.target.value)}
                 />
-
-                <label className="form-label" htmlFor="firstName">
-                  Last Name
-                </label>
               </div>
 
-              <div className="form-floating mb-4">
+              <div className="mb-4">
+                <label className="form-label" htmlFor="number">
+                  Card Number
+                </label>
+
                 <input
                   type="text"
                   required
-                  className="form-control cus-form-control"
-                  id="lastName"
-                  placeholder="Doe"
-                  onChange={(e) => setLastName(e.target.value)}
+                  inputMode="numeric"
+                  className="form-control cus-form-control transparent rounded-0 border-0 border-bottom"
+                  id="number"
+                  maxLength={16}
+                  placeholder="xxxx xxxx xxxx xxxx"
+                  onChange={(e) => setNumber(e.target.value)}
                 />
-
-                <label className="form-label" htmlFor="lastName">
-                  First Name
-                </label>
               </div>
 
-              <div className="form-floating mb-4">
-                <input
-                  type="date"
-                  required
-                  className="form-control cus-form-control"
-                  id="dob"
-                  placeholder="Date Of Birth"
-                  onChange={(e) => setDob(e.target.value)}
-                />
+              <div className="d-flex justify-content-between mb-4">
+                <div className="me-2">
+                  <label className="form-label" htmlFor="date">
+                    Expiry Date
+                  </label>
 
-                <label className="form-label" htmlFor="dob">
-                  Date Of Birth
-                </label>
+                  <input
+                    type="text"
+                    required
+                    inputMode="numeric"
+                    className="form-control cus-form-control transparent rounded-0 border-0 border-bottom"
+                    id="date"
+                    maxLength={4}
+                    placeholder="mmyy"
+                    onChange={(e) => setDate(e.target.value)}
+                  />
+                </div>
+
+                <div className="ms-2">
+                  <label className="form-label" htmlFor="cvv">
+                    CVV
+                  </label>
+
+                  <input
+                    type="text"
+                    required
+                    inputMode="numeric"
+                    className="form-control cus-form-control transparent rounded-0 border-0 border-bottom"
+                    id="cvv"
+                    maxLength={3}
+                    placeholder="xxx"
+                    onChange={(e) => setCvv(e.target.value)}
+                  />
+                </div>
               </div>
-
-              <div className="form-floating mb-4">
-                <input
-                  type="email"
-                  required
-                  className="form-control cus-form-control"
-                  id="email"
-                  placeholder="example@email.com"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-
-                <label className="form-label" htmlFor="email">
-                  Email Address
-                </label>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="btn btn-lg btn-primary mt-5 w-100"
-              >
-                {isLoading ? <Loader /> : "Proceed"}
-              </button>
             </form>
+
+            <button
+              type="submit"
+              form="form"
+              disabled={isLoading}
+              className="btn btn-lg btn-primary mt-5 w-100"
+            >
+              {isLoading ? <Loader /> : "Proceed"}
+            </button>
           </div>
         </div>
       </div>
