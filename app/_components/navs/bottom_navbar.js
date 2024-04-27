@@ -38,11 +38,13 @@ export default function BottomNavbar() {
         <Link
           href="/flights"
           className={`d-flex flex-column text-decoration-none align-items-center ${
-            path === "/flights" ? styles.text_bottom_active : styles.text_bottom
+            path.includes("flights")
+              ? styles.text_bottom_active
+              : styles.text_bottom
           }`}
         >
           <Image
-            src={path === "/flights" ? flightActive : flight}
+            src={path.includes("flights") ? flightActive : flight}
             priority
             alt="flight"
           />
@@ -52,11 +54,13 @@ export default function BottomNavbar() {
         <Link
           href="/hotels"
           className={`d-flex flex-column text-decoration-none align-items-center ${
-            path === "/hotels" ? styles.text_bottom_active : styles.text_bottom
+            path.includes("hotels")
+              ? styles.text_bottom_active
+              : styles.text_bottom
           }`}
         >
           <Image
-            src={path === "/hotels" ? hotelActive : hotel}
+            src={path.includes("hotels") ? hotelActive : hotel}
             priority
             alt="hotel"
           />
@@ -66,13 +70,13 @@ export default function BottomNavbar() {
         <Link
           href="/auth/profile"
           className={`d-flex flex-column text-decoration-none align-items-center ${
-            path === "/auth/profile"
+            path.includes("profile")
               ? styles.text_bottom_active
               : styles.text_bottom
           }`}
         >
           <Image
-            src={path === "/auth/profile" ? profileActive : profile}
+            src={path.includes("profile") ? profileActive : profile}
             priority
             alt="profile"
           />

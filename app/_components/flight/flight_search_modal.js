@@ -17,7 +17,6 @@ const FlightSearchModal = ({ showState, onHide }) => {
   const [returnTo, setReturnTo] = useState(true);
   const [passengers, setPassengers] = useState(false);
   const [classType, setClassType] = useState(false);
-
   const router = useRouter();
 
   const onSearchFlight = async (e) => {
