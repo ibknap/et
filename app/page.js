@@ -8,9 +8,11 @@ import { useEffect, useState } from "react";
 import FlightSearchBox from "@/app/_components/flight/flight_search_box";
 import FlightContainer from "@/app/_components/flight/flight_container";
 import HotelContainer from "@/app/_components/hotel/hotel_container";
+import { useRouter } from "next/navigation";
 
 const Home = () => {
   const [show, setShow] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const lsetads = localStorage.getItem("lsetads");
@@ -30,7 +32,6 @@ const Home = () => {
 
       <FlightSearchBox />
       <FlightContainer />
-      
       <HotelContainer />
 
       <Footer />

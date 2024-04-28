@@ -2,8 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import useEmblaCarousel from "embla-carousel-react";
-import { Star1 } from "iconsax-react";
-import Image from "next/image";
+import { SearchNormal1, Star1 } from "iconsax-react";
 
 const datas = [
   {
@@ -113,7 +112,25 @@ const HotelContainer = () => {
           </div>
         </div>
 
-        <div className="row mt-4">
+        <section className="row mt-4">
+          <div className="container">
+            <div className="row justify-content-center">
+              <div className="col-sm-6">
+                <div
+                  onClick={() => {
+                    router.push("/hotels");
+                  }}
+                  className="shadow d-flex justify-content-between form-control cus-form-control border border-3 border-warning pe-active"
+                >
+                  <span className="fw-light">Search For Hotels</span>
+                  <SearchNormal1 />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="row mt-5">
           <div className="col-12">
             <h2>Stay At</h2>
           </div>
