@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import useEmblaCarousel from "embla-carousel-react";
 import { ArrowRight2 } from "iconsax-react";
 
-const FlightsContainer = () => {
+const FlightContainer = () => {
   const [emblaRef] = useEmblaCarousel();
   const router = useRouter();
 
@@ -94,24 +94,36 @@ const FlightsContainer = () => {
                     name: "Califoria",
                     img: "https://images.unsplash.com/photo-1440778303588-435521a205bc?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                   },
-                  { name: "Doha", img: "" },
-                  { name: "Berlin Summer", img: "" },
-                  { name: "Istandul", img: "" },
-                  { name: "New York, US", img: "" },
+                  {
+                    name: "Doha",
+                    img: "https://plus.unsplash.com/premium_photo-1697730020118-46dffe1c5b8c?q=80&w=2942&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                  },
+                  {
+                    name: "Berlin Summer",
+                    img: "https://images.unsplash.com/photo-1566404791232-af9fe0ae8f8b?q=80&w=3136&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                  },
+                  {
+                    name: "Istanbul",
+                    img: "https://plus.unsplash.com/premium_photo-1681929370651-cc8391395d81?q=80&w=3133&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                  },
+                  {
+                    name: "New York, US",
+                    img: "https://images.unsplash.com/photo-1452858426607-6e3f8858ceb0?q=80&w=3174&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                  },
                 ].map((data, index) => (
                   <div
                     key={index}
                     onClick={() => {
                       router.push("/flights/result/");
                     }}
-                    className="embla__slide mb-3 pe-active"
+                    className="embla__slide__2 mb-3 pe-active"
                   >
                     <div className="card rounded-4 shadow-sm">
                       <img
                         src={data.img}
                         alt={data.name}
-                        className="w-100 rounded-top-4"
-                        height={150}
+                        className="w-100 rounded-top-4 object-fit-cover"
+                        height="150px"
                       />
 
                       <div className="p-3">
@@ -138,4 +150,4 @@ const FlightsContainer = () => {
   );
 };
 
-export default FlightsContainer;
+export default FlightContainer;

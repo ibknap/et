@@ -6,7 +6,8 @@ import BottomNavbar from "@/app/_components/navs/bottom_navbar";
 import OnBoard from "@/app/_components/onboard";
 import { useEffect, useState } from "react";
 import FlightSearchBox from "@/app/_components/flight/flight_search_box";
-import FlightsContainer from "@/app/_components/flight/flights_container";
+import FlightContainer from "@/app/_components/flight/flight_container";
+import HotelContainer from "@/app/_components/hotel/hotel_container";
 
 const Home = () => {
   const [show, setShow] = useState(false);
@@ -28,7 +29,9 @@ const Home = () => {
       {show && <OnBoard showState={true} onHide={() => setShow(false)} />}
 
       <FlightSearchBox />
-      <FlightsContainer />
+      <FlightContainer />
+      
+      <HotelContainer />
 
       <Footer />
       <BottomNavbar />
