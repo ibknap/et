@@ -4,7 +4,7 @@ import Navbar from "@/app/_components/navs/navbar";
 import Footer from "@/app/_components/navs/footer";
 import BottomNavbar from "@/app/_components/navs/bottom_navbar";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Loader from "@/app/_components/loader";
 import visa from "@/public/images/visa.png";
 import master from "@/public/images/master.png";
@@ -17,11 +17,18 @@ export default function FlightCard() {
   const [date, setDate] = useState("");
   const [cvv, setCvv] = useState("");
   const router = useRouter();
+  const param = useSearchParams();
 
+  console.log(param);
   const onProceed = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    router.push("/payment/flight_ticket");
+
+    if (param.get("type") === "flight") {
+      router.push("/payment/flight_ticket");
+    } else {
+      router.push("/payment/hotel_ticket");
+    }
   };
 
   return (

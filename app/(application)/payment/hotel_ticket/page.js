@@ -3,12 +3,11 @@
 import Navbar from "@/app/_components/navs/navbar";
 import Footer from "@/app/_components/navs/footer";
 import BottomNavbar from "@/app/_components/navs/bottom_navbar";
-import Image from "next/image";
-import planeLine from "@/public/images/plane_line_dark.svg";
 import Loader from "@/app/_components/loader";
 import { useState } from "react";
+import { Location } from "iconsax-react";
 
-export default function FlightTicket() {
+export default function HotelTicket() {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -26,86 +25,40 @@ export default function FlightTicket() {
               className="shadow rounded-4"
               style={{ background: "#EAF1F850" }}
             >
-              <div className="d-flex justify-content-between bg-primary p-3 rounded-top-4">
+              <div className="bg-primary p-3 rounded-top-4">
                 <div>
-                  <h5 className="fw-bold text-dark">SYD</h5>
+                  <h2 className="fw-bold text-white">Emeralda De Hotel</h2>
 
                   <small className="fw-light text-white">
-                    Sydney, Australia
-                  </small>
-                </div>
-
-                <Image
-                  src={planeLine}
-                  priority
-                  alt="plane line"
-                  className="img-responsive w-100"
-                />
-
-                <div>
-                  <h5 className="fw-bold text-dark">LCY</h5>
-                  <small className="fw-light text-white">
-                    London, United Kingdom
+                    <Location color="#fff" /> Rome, Italy
                   </small>
                 </div>
               </div>
 
               <div className="p-3">
-                <div className="d-flex justify-content-between mb-3">
+                <div className="d-flex justify-content-between align-items-center mb-3">
                   <div>
-                    <small className="fw-light">Flight Date</small>
+                    <b>Check in</b>
                     <br />
-                    <b>18 April, 2024</b>
+                    <small className="fw-light">Wed, 16 Aug, 2023</small>
+                    <br />
+                    <small className="fw-light">12:00 PM</small>
                   </div>
 
-                  <div>
-                    <small className="fw-light">Airline</small>
-                    <br />
-                    <b>American Airlines</b>
-                  </div>
+                  <div className="text-warning">1 Night</div>
 
                   <div>
-                    <small className="fw-light">Gate</small>
+                    <b>Check out</b>
                     <br />
-                    <b>8C</b>
-                  </div>
-                </div>
-
-                <div className="d-flex justify-content-between mb-3">
-                  <div>
-                    <small className="fw-light">Boarding</small>
+                    <small className="fw-light">Wed, 17 Aug, 2023</small>
                     <br />
-                    <b>12:00 PM</b>
-                  </div>
-
-                  <div>
-                    <small className="fw-light">Class</small>
-                    <br />
-                    <b>Economy</b>
-                  </div>
-
-                  <div>
-                    <small className="fw-light">Seat</small>
-                    <br />
-                    <b>14D</b>
+                    <small className="fw-light">12:00 PM</small>
                   </div>
                 </div>
 
-                <div className="d-flex justify-content-between">
-                  <div>
-                    <small className="fw-light">Flight No</small>
-                    <br />
-                    <b>W3408</b>
-                  </div>
+                <hr />
 
-                  <div>
-                    <small className="fw-light">Baggage</small>
-                    <br />
-                    <b>20Kg</b>
-                  </div>
-
-                  <div />
-                </div>
+                <div className="text-center">1 Room · 1 Guest · 1 Night</div>
 
                 <hr />
 

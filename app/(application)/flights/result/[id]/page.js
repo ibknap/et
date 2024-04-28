@@ -98,7 +98,7 @@ export default function FlightDetails() {
             <button
               onClick={() => {
                 setIsLoading(true);
-                router.push("/payment/flight_checkout/");
+                router.push("/payment/checkout/");
               }}
               disabled={isLoading}
               className="btn btn-lg btn-primary mt-5 w-100"

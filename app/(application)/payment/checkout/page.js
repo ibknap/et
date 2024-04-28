@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "@/app/_components/loader";
 
-export default function FlightCheckout() {
+export default function Checkout() {
   const [isLoading, setIsLoading] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -20,7 +20,7 @@ export default function FlightCheckout() {
   const onPayNow = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    router.push("/payment/card");
+    router.push("/payment/card?type=flight");
   };
 
   return (
