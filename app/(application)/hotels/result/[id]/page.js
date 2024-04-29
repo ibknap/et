@@ -17,6 +17,7 @@ import bed from "@/public/icons/bed.svg";
 import door from "@/public/icons/door.svg";
 import useEmblaCarousel from "embla-carousel-react";
 import { Modal } from "react-bootstrap";
+import Loader from "@/app/_components/loader";
 
 const datas = [
   "https://plus.unsplash.com/premium_photo-1675972399394-9d9033de1d9e?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -210,6 +211,22 @@ export default function HotelDetails() {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
+            </div>
+          </div>
+
+          <div className="col-md-4 mt-5 mt-md-3">
+            <div className="d-flex justify-content-between align-items-center bg-warning p-3 rounded-4">
+              <div className="d-flex justify-content-center text-white align-items-center">
+                <h2 className="fw-bold text-primary">$29</h2> / per night
+              </div>
+
+              <button
+                disabled={isLoading}
+                onClick={() => {}}
+                className="btn btn-lg btn-primary px-5 w-auto"
+              >
+                {isLoading ? <Loader /> : "Book Now"}
+              </button>
             </div>
           </div>
         </div>
