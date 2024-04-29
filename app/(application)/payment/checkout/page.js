@@ -4,7 +4,7 @@ import Navbar from "@/app/_components/navs/navbar";
 import Footer from "@/app/_components/navs/footer";
 import BottomNavbar from "@/app/_components/navs/bottom_navbar";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Loader from "@/app/_components/loader";
 
 export default function Checkout() {
@@ -16,11 +16,17 @@ export default function Checkout() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [title, setTitle] = useState("Mr");
   const router = useRouter();
+  const param = useSearchParams();
 
   const onPayNow = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    router.push("/payment/card?type=flight");
+
+    if (param.get("type") === "flight") {
+      router.push("/payment/card?type=flight");
+    } else {
+      router.push("/payment/card?type=hotel");
+    }
   };
 
   return (

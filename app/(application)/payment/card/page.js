@@ -19,7 +19,6 @@ export default function FlightCard() {
   const router = useRouter();
   const param = useSearchParams();
 
-  console.log(param);
   const onProceed = async (e) => {
     e.preventDefault();
     setIsLoading(true);

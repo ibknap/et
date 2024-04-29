@@ -222,7 +222,10 @@ export default function HotelDetails() {
 
               <button
                 disabled={isLoading}
-                onClick={() => {}}
+                onClick={() => {
+                  setIsLoading(true);
+                  router.push("/hotels/result/check_in_out");
+                }}
                 className="btn btn-lg btn-primary px-5 w-auto"
               >
                 {isLoading ? <Loader /> : "Book Now"}
