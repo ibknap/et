@@ -143,7 +143,7 @@ export default function Flights() {
                       className="col-md-4"
                     >
                       <div
-                        className="p-3 mb-3 rounded-4 pe-active d-flex justify-content-between"
+                        className="p-3 mb-3 rounded-4 pe-active d-flex justify-content-between align-items-center"
                         style={{ background: "#EAF1F8" }}
                       >
                         <img
