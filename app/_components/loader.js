@@ -15,7 +15,7 @@ const Loader = ({
       <div className="d-flex justify-content-center align-items-center vh-100">
         <Image
           src={logo}
-          width={size}
+          width={500}
           priority={true}
           alt="logo"
           className="loader-img"

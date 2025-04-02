@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
+    "amadeus": "^11.0.0",
     "bootstrap": "^5.3.3",
+    "dompurify": "^3.2.4",
     "embla-carousel-react": "^8.0.2",
     "iconsax-react": "^0.0.8",
     "jquery": "^3.7.1",

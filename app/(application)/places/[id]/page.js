@@ -1,0 +1,195 @@
+"use client";
+
+import Navbar from "@/app/_components/navs/navbar";
+import Footer from "@/app/_components/navs/footer";
+import BottomNavbar from "@/app/_components/navs/bottom_navbar";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import { Location, Trash } from "iconsax-react";
+import swimmer from "@/public/icons/swimmer.svg";
+import wifi from "@/public/icons/wifi.svg";
+import utensils from "@/public/icons/utensils.svg";
+import park from "@/public/icons/park.svg";
+import hotelDark from "@/public/icons/hotel_dark.svg";
+import bath from "@/public/icons/bath.svg";
+import bed from "@/public/icons/bed.svg";
+import door from "@/public/icons/door.svg";
+import Image from "next/image";
+import { Modal } from "react-bootstrap";
+import Loader from "@/app/_components/loader";
+
+export default function PlaceDetail() {
+  const placeId = useParams().id;
+  const [emblaRef] = useEmblaCarousel();
+  const [isLoading, setIsLoading] = useState(true);
+  const [gallery, setGallery] = useState(null);
+  const [place, setPlace] = useState(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (placeId !== null) {
+      async function getApi() {
+        try {
+          const res = await fetch("/api/get_place", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              placeId: placeId,
+            }),
+          });
+
+          const resJson = await res.json();
+          const data = resJson.data;
+
+          setPlace(data);
+          console.log(data);
+
+          setIsLoading(false);
+        } catch (error) {
+          console.error("Error sending email:", error);
+        }
+      }
+
+      getApi();
+    }
+  }, [placeId]);
+
+  return (
+    <>
+      <Navbar />
+
+      {isLoading && place === null && (
+        <div className="col-md-12 mb-5 vh-100 d-flex justify-content-center align-items-center">
+          <Loader
+            style={{ width: 50, height: 50, borderTop: "3px solid #333" }}
+          />
+        </div>
+      )}
+
+      {!isLoading &&
+        place !== null &&
+        place !== undefined &&
+        place.length === 0 && (
+          <div className="col-md-12 mt-3 text-muted text-center">
+            <Trash size={100} color="black" variant="Bulk" />
+            <p className="mt-4 mb-0">No place yet</p>
+          </div>
+        )}
+
+      {!isLoading && place !== null && place !== undefined && (
+        <div className="container mb-5 px-md-5">
+          <div className="row justify-content-center">
+            <div className="col-12 fw-bold px-0">
+              <img
+                src={
+                  place.pictures.length > 0
+                    ? place.pictures[0]
+                    : "/logos/logo_dark.png"
+                }
+                alt="image"
+                width="100%"
+                height="425px"
+                className={`img-responsive mb-4 ${
+                  place.pictures.length > 0
+                    ? "object-fit-cover"
+                    : "object-fit-contain"
+                }`}
+              />
+
+              <div className="px-3">
+                <h1>{place.name}</h1>
+                <div>
+                  <Location /> Rome, Italy
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-8 mt-3">
+              <div className="mb-4">
+                <h4>Description</h4>
+
+                <div className="mt-2">
+                  <p
+                    className="fw-light"
+                    dangerouslySetInnerHTML={{
+                      __html: place.description,
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="col-12">
+              <h4>Gallery Photos</h4>
+
+              {place.pictures.length > 0 ? (
+                <div className="row">
+                  {place.pictures.map((img, index) => (
+                    <div
+                      key={index}
+                      onClick={() => setGallery(img)}
+                      className="col-sm-4 mb-3 pe-active"
+                    >
+                      <img
+                        src={img}
+                        width="100%"
+                        height={200}
+                        alt="image"
+                        className="rounded-4 shadow-sm object-fit-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <Trash size={200} color="black" variant="Bulk" />
+              )}
+            </div>
+
+            <div className="col-md-8 mt-3">
+              <div className="mt-3">
+                <b>Location</b>
+
+                <iframe
+                  src={`https://maps.google.com/maps?q=${place.geoCode.latitude},${place.geoCode.longitude}&hl=es;&z=14&amp;&output=embed`}
+                  width="100%"
+                  height="400"
+                  className="mt-2 rounded-4"
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Footer />
+      <BottomNavbar />
+
+      {gallery !== null && (
+        <Modal
+          scrollable
+          centered
+          show={gallery !== null}
+          onHide={() => setGallery(null)}
+        >
+          <Modal.Body className="p-0 p-3 m-0">
+            <div className="container p-0">
+              <div className="row">
+                <img
+                  src={gallery}
+                  width="100%"
+                  height="100%"
+                  alt="image"
+                  className="object-fit-cover"
+                />
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      )}
+    </>
+  );
+}

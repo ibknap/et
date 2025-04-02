@@ -9,6 +9,7 @@ import FlightSearchBox from "@/app/_components/flight/flight_search_box";
 import FlightContainer from "@/app/_components/flight/flight_container";
 import HotelContainer from "@/app/_components/hotel/hotel_container";
 import { useRouter } from "next/navigation";
+import PlaceContainer from "@/app/_components/place/place_container";
 
 const Home = () => {
   const [show, setShow] = useState(false);
@@ -31,7 +32,9 @@ const Home = () => {
       {show && <OnBoard showState={true} onHide={() => setShow(false)} />}
 
       <FlightSearchBox />
+
       <FlightContainer />
+      <PlaceContainer />
       <HotelContainer />
 
       <Footer />
