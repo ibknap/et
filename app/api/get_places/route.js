@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import Amadeus from "amadeus";
+import { getRandomCity } from "@/app/_utils/cities";
 
 export async function POST(req) {
   const clientId = process.env.AMADEUS_TEST_API_KEY;
   const clientSecret = process.env.AMADEUS_TEST_API_SECRET_KEY;
-  const { latitude, longitude } = await req.json();
 
   const amadeus = new Amadeus({
     // hostname: "production", TODO: change to live
@@ -13,13 +13,18 @@ export async function POST(req) {
   });
 
   try {
-    const res = await amadeus.shopping.activities.get({
-      latitude,
-      longitude,
-    });
+    let data = [];
 
-    const data = res.data;
-    console.log(latitude, longitude, data);
+    while (data.length === 0) {
+      const city = getRandomCity();
+
+      const res = await amadeus.shopping.activities.get({
+        latitude: city.latitude,
+        longitude: city.longitude,
+      });
+
+      data = res.data;
+    }
 
     return NextResponse.json({ data }, { status: 200 });
   } catch (error) {

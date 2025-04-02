@@ -6,13 +6,11 @@ import { ArrowRight2, Trash } from "iconsax-react";
 import { useEffect, useState } from "react";
 import Loader from "@/app/_components/loader";
 import DOMPurify from "dompurify";
-import { getRandomCites } from "@/app/_utils/cities";
 
 const PlaceContainer = () => {
   const [emblaRef] = useEmblaCarousel();
   const [isLoadingPlaces, setIsLoadingPlaces] = useState(true);
   const [places, setPlaces] = useState(null);
-  const [country, setCountry] = useState(getRandomCites());
   const router = useRouter();
 
   useEffect(() => {
@@ -22,12 +20,6 @@ const PlaceContainer = () => {
           const res = await fetch("/api/get_places", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              // latitude: country.latitude,
-              // longitude: country.longitude,
-              latitude: 41.397158,
-              longitude: 2.160873,
-            }),
           });
 
           const resJson = await res.json();
@@ -77,51 +69,61 @@ const PlaceContainer = () => {
               <div className="col-12 mt-3">
                 <div className="embla" ref={emblaRef}>
                   <div className="embla__container">
-                    {places.map((place, index) => (
-                      <div
-                        key={index}
-                        onClick={() => router.push(`/places/${place.id}/`)}
-                        className="embla__slide mb-3 pe-active"
-                      >
-                        <div className="card rounded-4 border-0 shadow-sm">
-                          <img
-                            src={
-                              place.pictures.length > 0
-                                ? place.pictures[0]
-                                : "/logos/logo_dark.png"
-                            }
-                            alt={place.name}
-                            className={`w-100 rounded-top-4 ${
-                              place.pictures.length > 0
-                                ? "object-fit-cover"
-                                : "object-fit-contain"
-                            }`}
-                            height="200px"
-                          />
-
-                          <div className="p-3">
-                            <p className="fw-bold">{place.name}</p>
-
-                            <p
-                              className="fw-light"
-                              dangerouslySetInnerHTML={{
-                                __html:
-                                  DOMPurify.sanitize(
-                                    place.description
-                                  ).substring(0, 100) + "...",
-                              }}
+                    {[...places]
+                      .sort((a, b) => {
+                        if (a.pictures.length > 0 && b.pictures.length === 0)
+                          return -1;
+                        if (a.pictures.length === 0 && b.pictures.length > 0)
+                          return 1;
+                        return 0;
+                      })
+                      .map((place, index) => (
+                        <div
+                          key={index}
+                          onClick={() => router.push(`/places/${place.id}/`)}
+                          className="embla__slide mb-3 pe-active"
+                        >
+                          <div className="card rounded-4 border-0 shadow-sm">
+                            <img
+                              src={
+                                place.pictures.length > 0
+                                  ? place.pictures[0]
+                                  : "/logos/logo_dark.png"
+                              }
+                              alt={place.name}
+                              className={`w-100 rounded-top-4 ${
+                                place.pictures.length > 0
+                                  ? "object-fit-cover"
+                                  : "object-fit-contain"
+                              }`}
+                              height="200px"
                             />
 
-                            <hr />
+                            <div className="p-3">
+                              <p className="fw-bold">{place.name}</p>
 
-                            <div className="d-flex justify-content-between align-items-center">
-                              <span className="fw-bold">Find more details</span>
-                              <ArrowRight2 />
+                              <p
+                                className="fw-light"
+                                dangerouslySetInnerHTML={{
+                                  __html:
+                                    DOMPurify.sanitize(
+                                      place.description
+                                    ).substring(0, 100) + "...",
+                                }}
+                              />
+
+                              <hr />
+
+                              <div className="d-flex justify-content-between align-items-center">
+                                <span className="fw-bold">
+                                  Find more details
+                                </span>
+                                <ArrowRight2 />
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 </div>
               </div>

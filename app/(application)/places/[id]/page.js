@@ -3,29 +3,17 @@
 import Navbar from "@/app/_components/navs/navbar";
 import Footer from "@/app/_components/navs/footer";
 import BottomNavbar from "@/app/_components/navs/bottom_navbar";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import useEmblaCarousel from "embla-carousel-react";
 import { Location, Trash } from "iconsax-react";
-import swimmer from "@/public/icons/swimmer.svg";
-import wifi from "@/public/icons/wifi.svg";
-import utensils from "@/public/icons/utensils.svg";
-import park from "@/public/icons/park.svg";
-import hotelDark from "@/public/icons/hotel_dark.svg";
-import bath from "@/public/icons/bath.svg";
-import bed from "@/public/icons/bed.svg";
-import door from "@/public/icons/door.svg";
-import Image from "next/image";
 import { Modal } from "react-bootstrap";
 import Loader from "@/app/_components/loader";
 
 export default function PlaceDetail() {
   const placeId = useParams().id;
-  const [emblaRef] = useEmblaCarousel();
   const [isLoading, setIsLoading] = useState(true);
   const [gallery, setGallery] = useState(null);
   const [place, setPlace] = useState(null);
-  const router = useRouter();
 
   useEffect(() => {
     if (placeId !== null) {
@@ -97,30 +85,29 @@ export default function PlaceDetail() {
                 }`}
               />
 
-              <div className="px-3">
-                <h1>{place.name}</h1>
-                <div>
-                  <Location /> Rome, Italy
-                </div>
-              </div>
+              <h1>{place.name}</h1>
             </div>
 
-            <div className="col-md-8 mt-3">
+            <div className="col-md-8 mt-3 text-center">
               <div className="mb-4">
                 <h4>Description</h4>
 
-                <div className="mt-2">
-                  <p
-                    className="fw-light"
-                    dangerouslySetInnerHTML={{
-                      __html: place.description,
-                    }}
-                  />
-                </div>
+                {place.description ? (
+                  <div className="mt-2">
+                    <p
+                      className="fw-light"
+                      dangerouslySetInnerHTML={{
+                        __html: place.description,
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <Trash size={100} color="black" variant="Bulk" />
+                )}
               </div>
             </div>
 
-            <div className="col-12">
+            <div className="col-12 text-center">
               <h4>Gallery Photos</h4>
 
               {place.pictures.length > 0 ? (
@@ -142,7 +129,7 @@ export default function PlaceDetail() {
                   ))}
                 </div>
               ) : (
-                <Trash size={200} color="black" variant="Bulk" />
+                <Trash size={100} color="black" variant="Bulk" />
               )}
             </div>
 
