@@ -88,7 +88,11 @@ export default function PlaceDetail() {
               <h1>{place.name}</h1>
             </div>
 
-            <div className="col-md-8 mt-3 text-center">
+            <div
+              className={`col-md-8 mt-3 ${
+                place.description ? "" : "text-center"
+              }`}
+            >
               <div className="mb-4">
                 <h4>Description</h4>
 
@@ -107,7 +111,11 @@ export default function PlaceDetail() {
               </div>
             </div>
 
-            <div className="col-12 text-center">
+            <div
+              className={`col-12 ${
+                place.pictures.length > 0 ? "" : "text-center"
+              }`}
+            >
               <h4>Gallery Photos</h4>
 
               {place.pictures.length > 0 ? (
