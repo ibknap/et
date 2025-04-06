@@ -11,7 +11,8 @@ import {
   pageTitle,
   pageURL,
 } from "@/app/_components/seo";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const inter = Inter({ subsets: ["latin"] });
 
 // metadata
@@ -103,6 +104,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         {children}
         <BootstrapClient />
+        <ToastContainer position="bottom-center" autoClose={3000} />
       </body>
     </html>
   );

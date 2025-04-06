@@ -5,7 +5,6 @@ import useEmblaCarousel from "embla-carousel-react";
 import { SearchNormal1, Star1, Trash } from "iconsax-react";
 import { useEffect, useState } from "react";
 import Loader from "@/app/_components/loader";
-import { getCapitalImage } from "@/app/_utils/capitals";
 
 const HotelContainer = () => {
   const [emblaRef] = useEmblaCarousel();
@@ -23,9 +22,23 @@ const HotelContainer = () => {
           });
 
           const resJson = await res.json();
-          const data = resJson.data;
+          const hotels = resJson.data;
 
-          setHotels(data);
+          const updatedHotels = await Promise.all(
+            hotels.map(async (hotel) => {
+              const name = hotel.name;
+              const latLng = `${hotel.geoCode.latitude},${hotel.geoCode.longitude}`;
+
+              const [photos, details] = await Promise.all([
+                fetchPlacePhotos(name, latLng),
+                fetchPlaceDetail(name, latLng),
+              ]);
+
+              return { ...hotel, photos, details };
+            })
+          );
+
+          setHotels(updatedHotels);
           setIsLoadingHotels(false);
         } catch (error) {
           console.error("Error getting hotels:", error);
@@ -35,6 +48,69 @@ const HotelContainer = () => {
       getApi();
     }
   }, [hotels]);
+
+  async function fetchPlacePhotos(name, latLng) {
+    try {
+      const placeIdRes = await fetch("/api/get_google_place_id", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, latLng }),
+      });
+      const { placeId } = await placeIdRes.json();
+
+      if (!placeId) return;
+
+      const placeDetailRes = await fetch("/api/get_google_place_photo_ref", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ placeId }),
+      });
+      const { photoRef } = await placeDetailRes.json();
+
+      if (!photoRef || photoRef.length === 0) return;
+
+      const photoRes = await fetch("/api/get_google_place_photo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ photoRef: photoRef[0], firstOnly: true }),
+      });
+      const { url } = await photoRes.json();
+      console.log(url);
+
+      return url;
+    } catch (error) {
+      console.error(
+        "An error occurred while fetching the Google place photo.",
+        error
+      );
+    }
+  }
+
+  async function fetchPlaceDetail(name, latLng) {
+    try {
+      const placeIdRes = await fetch("/api/get_google_place_id", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, latLng }),
+      });
+      const { placeId } = await placeIdRes.json();
+
+      if (!placeId) return;
+
+      const placeDetailRes = await fetch("/api/get_google_place_detail", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ placeId }),
+      });
+      const { data } = await placeDetailRes.json();
+      return data;
+    } catch (error) {
+      console.error(
+        "An error occurred while fetching the Google place detail.",
+        error
+      );
+    }
+  }
 
   return (
     <main className="my-5">

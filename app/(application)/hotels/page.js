@@ -12,11 +12,6 @@ import plane from "@/public/icons/plane_white.svg";
 import { Trash } from "iconsax-react";
 import { useRouter } from "next/navigation";
 import Loader from "@/app/_components/loader";
-import { getCapitalImage } from "@/app/_utils/capitals";
-import {
-  getPlaceIdApi,
-  placeDetailsApi,
-} from "@/app/_components/place/place_api";
 
 export default function Flights() {
   const [isLoadingHotels, setIsLoadingHotels] = useState(true);
@@ -28,45 +23,100 @@ export default function Flights() {
     if (hotels === null) {
       async function getApi() {
         try {
-          const hotelName = "HOTEL VILLA PANTHEON";
-          const latLng = "48.84917,2.34615";
-          const placeId = await getPlaceIdApi(hotelName, latLng);
-          // const photoRef = await placeDetailsApi(placeId);
-          console.log(placeId);
-          // console.log(photoRef);
+          const res = await fetch("/api/get_hotels", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          });
+          const resJson = await res.json();
+          const hotels = resJson.data;
+
+          const updatedHotels = await Promise.all(
+            hotels.map(async (hotel) => {
+              const name = hotel.name;
+              const latLng = `${hotel.geoCode.latitude},${hotel.geoCode.longitude}`;
+
+              const [photos, details] = await Promise.all([
+                fetchPlacePhotos(name, latLng),
+                fetchPlaceDetail(name, latLng),
+              ]);
+
+              return { ...hotel, photos, details };
+            })
+          );
+
+          setHotels(updatedHotels);
+          setIsLoadingHotels(false);
         } catch (error) {
-          console.error("Error:", error);
+          console.error("Error getting hotels:", error);
         }
-        // try {
-        //   const res = await fetch("/api/get_hotels", {
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //   });
-
-        //   const resJson = await res.json();
-        //   const data = resJson.data;
-
-        //   try {
-        //     const hotelName = "HOTEL VILLA PANTHEON";
-        //     const latLng = "48.84917,2.34615";
-        //     const placeId = await getPlaceIdApi(hotelName, latLng);
-        //     const photoRef = await placeDetailsApi(placeId);
-        //     console.log(placeId);
-        //     console.log(photoRef);
-        //   } catch (error) {
-        //     console.error("Error:", error);
-        //   }
-
-        //   setHotels(data);
-        //   setIsLoadingHotels(false);
-        // } catch (error) {
-        //   console.error("Error getting hotels:", error);
-        // }
       }
 
       getApi();
     }
   }, [hotels]);
+
+  async function fetchPlacePhotos(name, latLng) {
+    try {
+      const placeIdRes = await fetch("/api/get_google_place_id", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, latLng }),
+      });
+      const { placeId } = await placeIdRes.json();
+
+      if (!placeId) return;
+
+      const placeDetailRes = await fetch("/api/get_google_place_photo_ref", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ placeId }),
+      });
+      const { photoRef } = await placeDetailRes.json();
+
+      if (!photoRef || photoRef.length === 0) return;
+
+      const photoRes = await fetch("/api/get_google_place_photo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ photoRef: photoRef[0], firstOnly: true }),
+      });
+      const { url } = await photoRes.json();
+      console.log(url);
+
+      return url;
+    } catch (error) {
+      console.error(
+        "An error occurred while fetching the Google place photo.",
+        error
+      );
+    }
+  }
+
+  async function fetchPlaceDetail(name, latLng) {
+    try {
+      const placeIdRes = await fetch("/api/get_google_place_id", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, latLng }),
+      });
+      const { placeId } = await placeIdRes.json();
+
+      if (!placeId) return;
+
+      const placeDetailRes = await fetch("/api/get_google_place_detail", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ placeId }),
+      });
+      const { data } = await placeDetailRes.json();
+      return data;
+    } catch (error) {
+      console.error(
+        "An error occurred while fetching the Google place detail.",
+        error
+      );
+    }
+  }
 
   const onSearchHotel = async (q) => {
     const keyword = q.toString().toUpperCase();
@@ -145,6 +195,7 @@ export default function Flights() {
                       borderTop: "3px solid #333",
                     }}
                   />
+                  Connecting to google maps & loading hotels...
                 </div>
               )}
 
@@ -164,34 +215,45 @@ export default function Flights() {
                 hotels.length > 0 && (
                   <div className="col-12">
                     <div className="row mt-5">
-                      {hotels.map((hotel, index) => (
-                        <div
-                          key={index}
-                          onClick={() => {
-                            router.push(`/hotels/result/${index}`);
-                          }}
-                          className="col-md-6"
-                        >
-                          <div
-                            className="p-3 mb-3 rounded-4 pe-active d-flex justify-content-between align-items-center"
-                            style={{ background: "#EAF1F8" }}
-                          >
-                            <img
-                              src={getCapitalImage(hotel.address.countryCode)}
-                              alt={hotel.name}
-                              width="250px"
-                              height="150px"
-                              style={{ minWidth: "200px", minHeight: "100px" }}
-                              className="rounded-4 object-fit-cover me-4"
-                            />
+                      {hotels.map((hotel, index) => {
+                        console.log(hotel.photos);
 
-                            <div className="w-100 flex-column d-flex justify-content-between">
-                              <h5 className="h5">{hotel.name}</h5>
-                              <p>{hotel.address.cityName}</p>
+                        return (
+                          <div
+                            key={index}
+                            onClick={() => {
+                              router.push(`/hotels/result/${index}`);
+                            }}
+                            className="col-md-6"
+                          >
+                            <div
+                              className="p-3 mb-3 rounded-4 pe-active d-flex justify-content-between align-items-center"
+                              style={{ background: "#EAF1F8" }}
+                            >
+                              <img
+                                src={
+                                  hotel.photos !== undefined
+                                    ? hotel.photos
+                                    : "/logos/logo_dark.png"
+                                }
+                                alt={hotel.name}
+                                width="250px"
+                                height="150px"
+                                style={{
+                                  minWidth: "200px",
+                                  minHeight: "100px",
+                                }}
+                                className="rounded-4 object-fit-cover me-4"
+                              />
+
+                              <div className="w-100 flex-column d-flex justify-content-between">
+                                <h5 className="h5">{hotel.name}</h5>
+                                <p>{hotel.address.cityName}</p>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 )}

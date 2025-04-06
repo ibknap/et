@@ -6,7 +6,7 @@ export async function POST(req) {
   const clientId = process.env.AMADEUS_TEST_API_KEY;
   const clientSecret = process.env.AMADEUS_TEST_API_SECRET_KEY;
   const capital = getRandomCapital();
-  const keyword = capital.capital;
+  const keyword = capital.name;
 
   const amadeus = new Amadeus({
     // hostname: "production", TODO: change to live

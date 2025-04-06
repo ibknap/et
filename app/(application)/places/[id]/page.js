@@ -5,7 +5,7 @@ import Footer from "@/app/_components/navs/footer";
 import BottomNavbar from "@/app/_components/navs/bottom_navbar";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Location, Trash } from "iconsax-react";
+import { Trash } from "iconsax-react";
 import { Modal } from "react-bootstrap";
 import Loader from "@/app/_components/loader";
 
