@@ -2,56 +2,39 @@
 
 import { useRouter } from "next/navigation";
 import useEmblaCarousel from "embla-carousel-react";
-import { SearchNormal1, Star1 } from "iconsax-react";
-
-const datas = [
-  {
-    title: "Emeralda De Hotel",
-    subtitle: "Rome, Italy",
-    price: "29",
-    rating: "4.8",
-    img: "https://plus.unsplash.com/premium_photo-1675972399394-9d9033de1d9e?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    title: "The Ritz-Carlton",
-    subtitle: "Tokyo",
-    price: "29",
-    rating: "4.8",
-    img: "https://plus.unsplash.com/premium_photo-1668496902276-5d0ba0728335?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    title: "The Plaza Hotel",
-    subtitle: "New York City",
-    price: "29",
-    rating: "4.8",
-    img: "https://plus.unsplash.com/premium_photo-1672082422409-879d79636902?q=80&w=3165&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    title: "Hotel Bel-Air",
-    subtitle: "California",
-    price: "29",
-    rating: "4.8",
-    img: "https://plus.unsplash.com/premium_photo-1675827055597-2406877d4764?q=80&w=2942&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    title: "The Savoy",
-    subtitle: "England",
-    price: "29",
-    rating: "4.8",
-    img: "https://plus.unsplash.com/premium_photo-1672055504819-3c87b9865333?q=80&w=3174&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    title: "Mandarin Oriental",
-    subtitle: "Bangkok",
-    price: "29",
-    rating: "4.8",
-    img: "https://plus.unsplash.com/premium_photo-1676469292214-2871e2841cbe?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-];
+import { SearchNormal1, Star1, Trash } from "iconsax-react";
+import { useEffect, useState } from "react";
+import Loader from "@/app/_components/loader";
+import { getCapitalImage } from "@/app/_utils/capitals";
 
 const HotelContainer = () => {
   const [emblaRef] = useEmblaCarousel();
+  const [isLoadingHotels, setIsLoadingHotels] = useState(true);
+  const [hotels, setHotels] = useState(null);
   const router = useRouter();
+
+  useEffect(() => {
+    if (hotels === null) {
+      async function getApi() {
+        try {
+          const res = await fetch("/api/get_hotels", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          });
+
+          const resJson = await res.json();
+          const data = resJson.data;
+
+          setHotels(data);
+          setIsLoadingHotels(false);
+        } catch (error) {
+          console.error("Error getting hotels:", error);
+        }
+      }
+
+      getApi();
+    }
+  }, [hotels]);
 
   return (
     <main className="my-5">
@@ -61,55 +44,75 @@ const HotelContainer = () => {
             <h2>Book Hotel</h2>
           </div>
 
-          <div className="col-12 mt-3">
-            <div className="embla" ref={emblaRef}>
-              <div className="embla__container">
-                {datas.map((data, index) => (
-                  <div
-                    key={index}
-                    onClick={() => {
-                      router.push(`/hotels/result/${index}`);
-                    }}
-                    className="embla__slide__3 mb-3 pe-active"
-                  >
-                    <div
-                      className="position-relative"
-                      style={{ width: "100%", height: 400 }}
-                    >
-                      <img
-                        src={data.img}
-                        alt={data.title}
-                        className="w-100 card rounded-4 shadow-sm object-fit-cover position-relative"
-                        style={{ width: "100%", height: 400, zIndex: -1 }}
-                      />
+          {isLoadingHotels && hotels === null && (
+            <div className="col-md-12 mt-3 d-flex justify-content-center">
+              <Loader
+                style={{ width: 50, height: 50, borderTop: "3px solid #333" }}
+              />
+            </div>
+          )}
 
+          {!isLoadingHotels &&
+            hotels !== null &&
+            hotels !== undefined &&
+            hotels.length === 0 && (
+              <div className="col-md-12 mt-3 text-muted text-center">
+                <Trash size={100} color="black" variant="Bulk" />
+                <p className="mt-4 mb-0">No hotels yet</p>
+              </div>
+            )}
+
+          {!isLoadingHotels &&
+            hotels !== null &&
+            hotels !== undefined &&
+            hotels.length > 0 && (
+              <div className="col-12 mt-3">
+                <div className="embla" ref={emblaRef}>
+                  <div className="embla__container">
+                    {hotels.slice(0, 10).map((hotel, index) => (
                       <div
-                        style={{ zIndex: 1 }}
-                        className="px-3 py-2 m-3 d-flex align-items-center position-absolute top-0 text-white bg-primary rounded-pill"
+                        key={index}
+                        onClick={() => {
+                          router.push(`/hotels/result/${index}`);
+                        }}
+                        className="embla__slide__3 mb-3 pe-active"
                       >
-                        <Star1 variant="Bold" color="#fff" className="me-2" />{" "}
-                        {data.rating}
-                      </div>
+                        <div
+                          className="position-relative"
+                          style={{ width: "100%", height: 400 }}
+                        >
+                          <img
+                            src={getCapitalImage(hotel.address.countryCode)}
+                            alt={hotel.name}
+                            className="w-100 card rounded-4 shadow-sm object-fit-cover position-relative"
+                            style={{ width: "100%", height: 400, zIndex: -1 }}
+                          />
 
-                      <div
-                        style={{ zIndex: 1 }}
-                        className="p-3 position-absolute bottom-0 text-white"
-                      >
-                        <h5 className="fw-bold text-white">{data.title}</h5>
-                        <p className="fw-light text-white">{data.subtitle}</p>
+                          <div
+                            style={{ zIndex: 1 }}
+                            className="px-3 py-2 m-3 d-flex align-items-center position-absolute top-0 text-white bg-primary rounded-pill"
+                          >
+                            <Star1 variant="Bold" color="#fff" />
+                          </div>
 
-                        <div className="d-flex text-white">
-                          <h4>${data.price}</h4> / per night
+                          <div
+                            style={{ zIndex: 1 }}
+                            className="p-3 position-absolute bottom-0 text-white"
+                          >
+                            <h5 className="fw-bold text-white">{hotel.name}</h5>
+                            <p className="fw-light text-white">
+                              {hotel.address.cityName}
+                            </p>
+                          </div>
+
+                          <div className="img-gradient rounded-4" />
                         </div>
                       </div>
-
-                      <div className="img-gradient rounded-4" />
-                    </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
-          </div>
+            )}
         </div>
 
         <section className="row mt-4">
@@ -117,9 +120,7 @@ const HotelContainer = () => {
             <div className="row justify-content-center">
               <div className="col-sm-6">
                 <div
-                  onClick={() => {
-                    router.push("/hotels");
-                  }}
+                  onClick={() => router.push("/hotels")}
                   className="shadow d-flex justify-content-between form-control cus-form-control border border-3 border-warning pe-active"
                 >
                   <span className="fw-light">Search For Hotels</span>
@@ -135,43 +136,38 @@ const HotelContainer = () => {
             <h2>Stay At</h2>
           </div>
 
-          {datas.map((data, index) => (
-            <div
-              key={index}
-              onClick={() => {
-                router.push(`/hotels/result/${index}`);
-              }}
-              className="col-md-4"
-            >
+          {!isLoadingHotels &&
+            hotels !== null &&
+            hotels !== undefined &&
+            hotels.length > 0 &&
+            hotels.slice(-10).map((hotel, index) => (
               <div
-                className="p-3 mb-3 rounded-4 pe-active d-flex justify-content-between align-items-center"
-                style={{ background: "#EAF1F8" }}
+                key={index}
+                onClick={() => {
+                  router.push(`/hotels/result/${index}`);
+                }}
+                className="col-md-6"
               >
-                <img
-                  src={data.img}
-                  alt={data.title}
-                  width="100px"
-                  height="100px"
-                  style={{ minWidth: "100px", minHeight: "100px" }}
-                  className="rounded-4 object-fit-cover me-4"
-                />
+                <div
+                  className="p-3 mb-3 rounded-4 pe-active d-flex justify-content-between align-items-center"
+                  style={{ background: "#EAF1F8" }}
+                >
+                  <img
+                    src={getCapitalImage(hotel.address.countryCode)}
+                    alt={hotel.name}
+                    width="250px"
+                    height="150px"
+                    style={{ minWidth: "200px", minHeight: "100px" }}
+                    className="rounded-4 object-fit-cover me-4"
+                  />
 
-                <div className="w-100 flex-column d-flex justify-content-between">
-                  <div className="d-flex justify-content-end">
-                    <h4>${data.price}</h4> / per night
-                  </div>
-
-                  <h4>{data.title}</h4>
-                  <p>{data.subtitle}</p>
-
-                  <div className="d-flex">
-                    <Star1 variant="Bold" color="#FFB803" className="me-2" />{" "}
-                    {data.rating}
+                  <div className="w-100 flex-column d-flex justify-content-between">
+                    <h5>{hotel.name}</h5>
+                    <p>{hotel.address.cityName}</p>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </main>

@@ -31,11 +31,9 @@ export default function PlaceDetail() {
           const data = resJson.data;
 
           setPlace(data);
-          console.log(data);
-
           setIsLoading(false);
         } catch (error) {
-          console.error("Error sending email:", error);
+          console.error("Error getting place:", error);
         }
       }
 

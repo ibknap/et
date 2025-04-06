@@ -3,14 +3,16 @@
 import Navbar from "@/app/_components/navs/navbar";
 import Footer from "@/app/_components/navs/footer";
 import BottomNavbar from "@/app/_components/navs/bottom_navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import hotel from "@/public/icons/hotel_white.svg";
 import plane from "@/public/icons/plane_white.svg";
-import { Star1 } from "iconsax-react";
+import { Trash } from "iconsax-react";
 import { useRouter } from "next/navigation";
+import Loader from "@/app/_components/loader";
+import { getCapitalImage } from "@/app/_utils/capitals";
 
 const datas = [
   {
@@ -60,14 +62,38 @@ const datas = [
 export default function Flights() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchQ, setSearchQ] = useState(false);
+
+  const [isLoadingHotels, setIsLoadingHotels] = useState(true);
+  const [hotels, setHotels] = useState(null);
   const path = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    if (hotels === null) {
+      async function getApi() {
+        try {
+          const res = await fetch("/api/get_hotels", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          });
+
+          const resJson = await res.json();
+          const data = resJson.data;
+
+          setHotels(data);
+          setIsLoadingHotels(false);
+        } catch (error) {
+          console.error("Error getting hotels:", error);
+        }
+      }
+
+      getApi();
+    }
+  }, [hotels]);
 
   const onSearchHotel = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
-    router.push("/hotels/result");
   };
 
   return (
@@ -132,51 +158,65 @@ export default function Flights() {
                 </div>
               </div>
 
-              <div className="col-12">
-                <div className="row mt-5">
-                  {datas.map((data, index) => (
-                    <div
-                      key={index}
-                      onClick={() => {
-                        router.push(`/hotels/result/${index}`);
-                      }}
-                      className="col-md-4"
-                    >
-                      <div
-                        className="p-3 mb-3 rounded-4 pe-active d-flex justify-content-between align-items-center"
-                        style={{ background: "#EAF1F8" }}
-                      >
-                        <img
-                          src={data.img}
-                          alt={data.title}
-                          width="100px"
-                          height="100px"
-                          style={{ minWidth: "100px", minHeight: "100px" }}
-                          className="rounded-4 object-fit-cover me-4"
-                        />
+              {isLoadingHotels && hotels === null && (
+                <div className="col-md-12 mt-3 d-flex justify-content-center">
+                  <Loader
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderTop: "3px solid #333",
+                    }}
+                  />
+                </div>
+              )}
 
-                        <div className="w-100 flex-column d-flex justify-content-between">
-                          <div className="d-flex justify-content-end">
-                            <h4>${data.price}</h4> / per night
-                          </div>
+              {!isLoadingHotels &&
+                hotels !== null &&
+                hotels !== undefined &&
+                hotels.length === 0 && (
+                  <div className="col-md-12 mt-3 text-muted text-center">
+                    <Trash size={100} color="black" variant="Bulk" />
+                    <p className="mt-4 mb-0">No hotels yet</p>
+                  </div>
+                )}
 
-                          <h4>{data.title}</h4>
-                          <p>{data.subtitle}</p>
+              {!isLoadingHotels &&
+                hotels !== null &&
+                hotels !== undefined &&
+                hotels.length > 0 && (
+                  <div className="col-12">
+                    <div className="row mt-5">
+                      {hotels.map((hotel, index) => (
+                        <div
+                          key={index}
+                          onClick={() => {
+                            router.push(`/hotels/result/${index}`);
+                          }}
+                          className="col-md-6"
+                        >
+                          <div
+                            className="p-3 mb-3 rounded-4 pe-active d-flex justify-content-between align-items-center"
+                            style={{ background: "#EAF1F8" }}
+                          >
+                            <img
+                              src={getCapitalImage(hotel.address.countryCode)}
+                              alt={hotel.name}
+                              width="250px"
+                              height="150px"
+                              style={{ minWidth: "200px", minHeight: "100px" }}
+                              className="rounded-4 object-fit-cover me-4"
+                            />
 
-                          <div className="d-flex">
-                            <Star1
-                              variant="Bold"
-                              color="#FFB803"
-                              className="me-2"
-                            />{" "}
-                            {data.rating}
+                            <div className="w-100 flex-column d-flex justify-content-between">
+                              <h5>{hotel.name}</h5>
+                              <p>{hotel.address.cityName}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </div>
+                )}
             </div>
           </div>
         </section>
