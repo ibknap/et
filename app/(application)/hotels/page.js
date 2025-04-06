@@ -187,7 +187,7 @@ export default function Flights() {
               </div>
 
               {isLoadingHotels && hotels === null && (
-                <div className="col-md-12 mt-3 d-flex justify-content-center">
+                <div className="col-md-12 mt-3 d-flex flex-column justify-content-center align-items-center">
                   <Loader
                     style={{
                       width: 50,
@@ -195,7 +195,7 @@ export default function Flights() {
                       borderTop: "3px solid #333",
                     }}
                   />
-                  Connecting to google maps & loading hotels...
+                  <p className="mt-3">Connecting to google maps & loading hotels...</p>
                 </div>
               )}
 
@@ -216,8 +216,6 @@ export default function Flights() {
                   <div className="col-12">
                     <div className="row mt-5">
                       {hotels.map((hotel, index) => {
-                        console.log(hotel.photos);
-
                         return (
                           <div
                             key={index}

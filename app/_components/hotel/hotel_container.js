@@ -121,10 +121,13 @@ const HotelContainer = () => {
           </div>
 
           {isLoadingHotels && hotels === null && (
-            <div className="col-md-12 mt-3 d-flex justify-content-center">
+            <div className="col-md-12 mt-3 d-flex flex-column justify-content-center align-items-center">
               <Loader
                 style={{ width: 50, height: 50, borderTop: "3px solid #333" }}
               />
+              <p className="mt-3">
+                Connecting to google maps & loading hotels...
+              </p>
             </div>
           )}
 
@@ -158,7 +161,11 @@ const HotelContainer = () => {
                           style={{ width: "100%", height: 400 }}
                         >
                           <img
-                            src={getCapitalImage(hotel.address.countryCode)}
+                            src={
+                              hotel.photos !== undefined
+                                ? hotel.photos
+                                : "/logos/logo_dark.png"
+                            }
                             alt={hotel.name}
                             className="w-100 card rounded-4 shadow-sm object-fit-cover position-relative"
                             style={{ width: "100%", height: 400, zIndex: -1 }}
@@ -229,7 +236,11 @@ const HotelContainer = () => {
                   style={{ background: "#EAF1F8" }}
                 >
                   <img
-                    src={getCapitalImage(hotel.address.countryCode)}
+                    src={
+                      hotel.photos !== undefined
+                        ? hotel.photos
+                        : "/logos/logo_dark.png"
+                    }
                     alt={hotel.name}
                     width="250px"
                     height="150px"
