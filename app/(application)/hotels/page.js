@@ -13,56 +13,12 @@ import { Trash } from "iconsax-react";
 import { useRouter } from "next/navigation";
 import Loader from "@/app/_components/loader";
 import { getCapitalImage } from "@/app/_utils/capitals";
-
-const datas = [
-  {
-    title: "Emeralda De Hotel",
-    subtitle: "Rome, Italy",
-    price: "29",
-    rating: "4.8",
-    img: "https://plus.unsplash.com/premium_photo-1675972399394-9d9033de1d9e?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    title: "The Ritz-Carlton",
-    subtitle: "Tokyo",
-    price: "29",
-    rating: "4.8",
-    img: "https://plus.unsplash.com/premium_photo-1668496902276-5d0ba0728335?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    title: "The Plaza Hotel",
-    subtitle: "New York City",
-    price: "29",
-    rating: "4.8",
-    img: "https://plus.unsplash.com/premium_photo-1672082422409-879d79636902?q=80&w=3165&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    title: "Hotel Bel-Air",
-    subtitle: "California",
-    price: "29",
-    rating: "4.8",
-    img: "https://plus.unsplash.com/premium_photo-1675827055597-2406877d4764?q=80&w=2942&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    title: "The Savoy",
-    subtitle: "England",
-    price: "29",
-    rating: "4.8",
-    img: "https://plus.unsplash.com/premium_photo-1672055504819-3c87b9865333?q=80&w=3174&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    title: "Mandarin Oriental",
-    subtitle: "Bangkok",
-    price: "29",
-    rating: "4.8",
-    img: "https://plus.unsplash.com/premium_photo-1676469292214-2871e2841cbe?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-];
+import {
+  getPlaceIdApi,
+  placeDetailsApi,
+} from "@/app/_components/place/place_api";
 
 export default function Flights() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchQ, setSearchQ] = useState(false);
-
   const [isLoadingHotels, setIsLoadingHotels] = useState(true);
   const [hotels, setHotels] = useState(null);
   const path = usePathname();
@@ -72,28 +28,50 @@ export default function Flights() {
     if (hotels === null) {
       async function getApi() {
         try {
-          const res = await fetch("/api/get_hotels", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-          });
-
-          const resJson = await res.json();
-          const data = resJson.data;
-
-          setHotels(data);
-          setIsLoadingHotels(false);
+          const hotelName = "HOTEL VILLA PANTHEON";
+          const latLng = "48.84917,2.34615";
+          const placeId = await getPlaceIdApi(hotelName, latLng);
+          // const photoRef = await placeDetailsApi(placeId);
+          console.log(placeId);
+          // console.log(photoRef);
         } catch (error) {
-          console.error("Error getting hotels:", error);
+          console.error("Error:", error);
         }
+        // try {
+        //   const res = await fetch("/api/get_hotels", {
+        //     method: "POST",
+        //     headers: { "Content-Type": "application/json" },
+        //   });
+
+        //   const resJson = await res.json();
+        //   const data = resJson.data;
+
+        //   try {
+        //     const hotelName = "HOTEL VILLA PANTHEON";
+        //     const latLng = "48.84917,2.34615";
+        //     const placeId = await getPlaceIdApi(hotelName, latLng);
+        //     const photoRef = await placeDetailsApi(placeId);
+        //     console.log(placeId);
+        //     console.log(photoRef);
+        //   } catch (error) {
+        //     console.error("Error:", error);
+        //   }
+
+        //   setHotels(data);
+        //   setIsLoadingHotels(false);
+        // } catch (error) {
+        //   console.error("Error getting hotels:", error);
+        // }
       }
 
       getApi();
     }
   }, [hotels]);
 
-  const onSearchHotel = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
+  const onSearchHotel = async (q) => {
+    const keyword = q.toString().toUpperCase();
+
+    console.log(keyword);
   };
 
   return (
@@ -149,7 +127,7 @@ export default function Flights() {
                     className="form-control cus-form-control"
                     id="search"
                     placeholder="Search For Hotels"
-                    onChange={(e) => setSearchQ(e.target.value)}
+                    onChange={(e) => onSearchHotel(e.target.value)}
                   />
 
                   <label className="form-label" htmlFor="search">
@@ -208,7 +186,7 @@ export default function Flights() {
                             />
 
                             <div className="w-100 flex-column d-flex justify-content-between">
-                              <h5>{hotel.name}</h5>
+                              <h5 className="h5">{hotel.name}</h5>
                               <p>{hotel.address.cityName}</p>
                             </div>
                           </div>
