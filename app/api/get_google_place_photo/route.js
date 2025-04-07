@@ -31,7 +31,7 @@ export async function POST(req) {
       return NextResponse.json({ urls }, { status: 200 });
     }
   } catch (error) {
-    console.error("Error fetching google place_id:", error);
+    console.error("Error fetching google photo(s):", error);
     return NextResponse.json(
       { error: error.message || "Internal Server Error" },
       { status: 500 }

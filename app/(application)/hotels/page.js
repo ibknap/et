@@ -195,7 +195,9 @@ export default function Flights() {
                       borderTop: "3px solid #333",
                     }}
                   />
-                  <p className="mt-3">Connecting to google maps & loading hotels...</p>
+                  <p className="mt-3">
+                    Connecting to google maps & loading hotels...
+                  </p>
                 </div>
               )}
 
@@ -241,7 +243,11 @@ export default function Flights() {
                                   minWidth: "200px",
                                   minHeight: "100px",
                                 }}
-                                className="rounded-4 object-fit-cover me-4"
+                                className={`rounded-4 me-4 ${
+                                  hotel.photos !== undefined
+                                    ? "object-fit-cover"
+                                    : "object-fit-contain"
+                                }`}
                               />
 
                               <div className="w-100 flex-column d-flex justify-content-between">

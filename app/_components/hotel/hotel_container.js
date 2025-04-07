@@ -167,8 +167,12 @@ const HotelContainer = () => {
                                 : "/logos/logo_dark.png"
                             }
                             alt={hotel.name}
-                            className="w-100 card rounded-4 shadow-sm object-fit-cover position-relative"
                             style={{ width: "100%", height: 400, zIndex: -1 }}
+                            className={`w-100 card rounded-4 shadow-sm position-relative ${
+                              hotel.photos !== undefined
+                                ? "object-fit-cover"
+                                : "object-fit-contain"
+                            }`}
                           />
 
                           <div
@@ -245,7 +249,11 @@ const HotelContainer = () => {
                     width="250px"
                     height="150px"
                     style={{ minWidth: "200px", minHeight: "100px" }}
-                    className="rounded-4 object-fit-cover me-4"
+                    className={`rounded-4 me-4 ${
+                      hotel.photos !== undefined
+                        ? "object-fit-cover"
+                        : "object-fit-contain"
+                    }`}
                   />
 
                   <div className="w-100 flex-column d-flex justify-content-between">
