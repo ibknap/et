@@ -363,6 +363,10 @@ img {
   background: #2873ba !important;
 }
 
+.bg-primary-80 {
+  background: #b3d9fd !important;
+}
+
 .text-accent {
   color: #44b1b4 !important;
 }

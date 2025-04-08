@@ -81,7 +81,6 @@ export default function Flights() {
         body: JSON.stringify({ photoRef: photoRef[0], firstOnly: true }),
       });
       const { url } = await photoRes.json();
-      console.log(url);
 
       return url;
     } catch (error) {
@@ -222,7 +221,7 @@ export default function Flights() {
                           <div
                             key={index}
                             onClick={() => {
-                              router.push(`/hotels/result/${index}`);
+                              router.push(`/hotels/result/${hotel.hotelIds[0]}`);
                             }}
                             className="col-md-6"
                           >

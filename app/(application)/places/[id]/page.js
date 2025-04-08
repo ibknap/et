@@ -117,7 +117,7 @@ export default function PlaceDetail() {
               <h4>Gallery Photos</h4>
 
               {place.pictures.length > 0 ? (
-                <div className="row">
+                <div className="row mt-3">
                   {place.pictures.map((img, index) => (
                     <div
                       key={index}
@@ -140,19 +140,17 @@ export default function PlaceDetail() {
             </div>
 
             <div className="col-md-8 mt-3">
-              <div className="mt-3">
-                <b>Location</b>
+              <h4>Location</h4>
 
-                <iframe
-                  src={`https://maps.google.com/maps?q=${place.geoCode.latitude},${place.geoCode.longitude}&hl=es;&z=14&amp;&output=embed`}
-                  width="100%"
-                  height="400"
-                  className="mt-2 rounded-4"
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              </div>
+              <iframe
+                src={`https://maps.google.com/maps?q=${place.geoCode.latitude},${place.geoCode.longitude}&hl=es;&z=14&amp;&output=embed`}
+                width="100%"
+                height="400"
+                className="mt-2 rounded-4"
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
           </div>
         </div>
