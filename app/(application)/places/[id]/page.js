@@ -64,7 +64,7 @@ export default function PlaceDetail() {
         )}
 
       {!isLoading && place !== null && place !== undefined && (
-        <div className="container mb-5 px-md-5">
+        <div className="container-fluid mb-5 px-md-5">
           <div className="row justify-content-center">
             <div className="col-12 fw-bold px-0">
               <img

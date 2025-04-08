@@ -636,13 +636,48 @@ export default function HotelDetails() {
                 {hotelOffers.length > 0 &&
                   hotelOffers.map((offer, index) => (
                     <div key={index} className="col-md-6">
-                      <div className="card p-2 mb-3">
-                        {capitalize(offer.hotel.name)}
-
+                      <div className="card mb-3">
                         {offer.offers.length > 0 ? (
-                          <ul>
+                          <ul className="mt-3 list-group list-group-flush">
                             {offer.offers.map((offer_, index_) => (
-                              <li key={index_}></li>
+                              <li key={index_} className="list-group-item mb-2">
+                                <div className="mb-1">
+                                  {capitalize(offer_.room.description.text)}
+                                </div>
+
+                                <div className="mb-1">
+                                  <b>Amount:</b> {offer_.price.currency}{" "}
+                                  <b>{offer_.price.total}</b>
+                                </div>
+
+                                <div className="mb-1">
+                                  <b>Type:</b>{" "}
+                                  {offer_.room.type.replaceAll("_", " ")}
+                                </div>
+
+                                <div className="mb-1">
+                                  <b>Bed Type:</b>{" "}
+                                  {capitalize(
+                                    offer_.room.typeEstimated.bedType
+                                  ).replaceAll("_", " ")}
+                                </div>
+
+                                <div className="mb-1">
+                                  <b>Bed(s):</b>{" "}
+                                  {offer_.room.typeEstimated.beds}
+                                </div>
+
+                                <div className="mb-1">
+                                  <b>Category:</b>{" "}
+                                  {capitalize(
+                                    offer_.room.typeEstimated.category
+                                  ).replaceAll("_", " ")}
+                                </div>
+
+                                <div className="mb-1">
+                                  <b>guests:</b> {offer_.guests.adults}
+                                </div>
+                              </li>
                             ))}
                           </ul>
                         ) : (
