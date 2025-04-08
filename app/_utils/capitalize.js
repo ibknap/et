@@ -1,5 +1,9 @@
 const capitalize = (string) => {
-  return string.replace(/(^|\s)(\p{Ll})/gu, (match, preceding, letter) => preceding + letter.toUpperCase());
+  return string
+    .toLowerCase()
+    .replace(/(^|\s)(\S)/g, (match, preceding, letter) => {
+      return preceding + letter.toUpperCase();
+    });
 };
 
 export default capitalize;

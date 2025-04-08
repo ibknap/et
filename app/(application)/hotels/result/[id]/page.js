@@ -4,38 +4,22 @@ import Navbar from "@/app/_components/navs/navbar";
 import Footer from "@/app/_components/navs/footer";
 import BottomNavbar from "@/app/_components/navs/bottom_navbar";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import {
-  Building,
-  Call,
-  Global,
-  Location,
-  Star,
-  Star1,
-  Trash,
-} from "iconsax-react";
+import { Building, Call, Global, Location, Star1, Trash } from "iconsax-react";
 import Image from "next/image";
-import swimmer from "@/public/icons/swimmer.svg";
-import wifi from "@/public/icons/wifi.svg";
-import utensils from "@/public/icons/utensils.svg";
-import park from "@/public/icons/park.svg";
-import hotelDark from "@/public/icons/hotel_dark.svg";
-import bath from "@/public/icons/bath.svg";
-import bed from "@/public/icons/bed.svg";
-import door from "@/public/icons/door.svg";
-import useEmblaCarousel from "embla-carousel-react";
 import { Modal } from "react-bootstrap";
-import Loader from "@/app/_components/loader";
 import Link from "next/link";
+import Loader from "@/app/_components/loader";
+import { toast } from "react-toastify";
+import capitalize from "@/app/_utils/capitalize";
 
 const hotel = {
   id: 3718191,
-  name: "PROTEA ABUJA",
+  name: "TRANSCORP HILTON ABUJA",
   iataCode: "ABV",
   subType: "HOTEL_GDS",
   relevance: 72,
   type: "location",
-  hotelIds: ["PRABVABU"],
+  hotelIds: ["HLABV230"],
   address: {
     cityName: "ABUJA",
     countryCode: "NG",
@@ -360,9 +344,40 @@ const hotel = {
 
 export default function HotelDetails() {
   const [isLoading, setIsLoading] = useState(false);
+  const [hotelOffers, setHotelOffers] = useState(null);
   const [gallery, setGallery] = useState(null);
-  const [emblaRef] = useEmblaCarousel();
-  const router = useRouter();
+  const [people, setPeople] = useState("1");
+
+  const onSearchHotelOffers = async (hotelIds) => {
+    setIsLoading(true);
+    toast.info("Searching for available rooms and offers...");
+
+    try {
+      const res = await fetch("/api/get_hotel_offers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          hotelIds: hotelIds,
+          adults: people,
+        }),
+      });
+
+      const resJson = await res.json();
+      const data = resJson.data;
+
+      if (data != undefined || data != null) {
+        console.log(data);
+
+        setHotelOffers(data);
+      } else {
+        toast.error("SORRY; No available rooms at the moment!");
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      toast.error("SORRY; No available rooms at the moment!");
+    }
+  };
 
   return (
     <>
@@ -510,7 +525,37 @@ export default function HotelDetails() {
           </div>
 
           <div className="col-md-4 mt-5 mt-md-3">
-            <div>
+            <div className="mb-4">
+              <label className="form-label" htmlFor="people">
+                Number of Guest
+              </label>
+              <select
+                id="people"
+                required
+                className="form-select cus-form-control"
+                onChange={(e) => setPeople(e.target.value)}
+              >
+                <option value="1">1 Person</option>
+                <option value="2">2 People</option>
+                <option value="3">3 People</option>
+                <option value="4">4 People</option>
+                <option value="5">5 People</option>
+              </select>
+            </div>
+
+            <button
+              disabled={isLoading}
+              onClick={() => onSearchHotelOffers(hotel.hotelIds[0])}
+              className="btn btn-lg btn-primary w-100 shadow"
+            >
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <h5 className="m-0 h5">Check Available Rooms & Book</h5>
+              )}
+            </button>
+
+            <div className="mt-5">
               <h4>Reviews</h4>
 
               {hotel.details.reviews.length > 0 ? (
@@ -527,6 +572,7 @@ export default function HotelDetails() {
                           width={50}
                           height={50}
                           className="me-2"
+                          alt="image"
                         />
                         <div className="d-flex flex-column">
                           <b>{review.author_name}</b>
@@ -543,17 +589,6 @@ export default function HotelDetails() {
                 <Trash size={100} color="black" variant="Bulk" />
               )}
             </div>
-
-            <button
-              disabled={isLoading}
-              onClick={() => {
-                setIsLoading(true);
-                router.push("/hotels/result/check_in_out");
-              }}
-              className="btn btn-lg btn-primary w-100 shadow"
-            >
-              <h5 className="m-0 h5">Check Available Rooms & Book</h5>
-            </button>
           </div>
         </div>
       </div>
@@ -578,6 +613,44 @@ export default function HotelDetails() {
                   alt="image"
                   className="object-fit-cover"
                 />
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      )}
+
+      {hotelOffers !== null && (
+        <Modal
+          scrollable
+          size="xl"
+          show={hotelOffers !== null}
+          onHide={() => setHotelOffers(null)}
+        >
+          <Modal.Header className="py-2" closeButton>
+            <Modal.Title className="h5">All Available Offers</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body className="p-0 p-3 m-0">
+            <div className="container">
+              <div className="row">
+                {hotelOffers.length > 0 &&
+                  hotelOffers.map((offer, index) => (
+                    <div key={index} className="col-md-6">
+                      <div className="card p-2 mb-3">
+                        {capitalize(offer.hotel.name)}
+
+                        {offer.offers.length > 0 ? (
+                          <ul>
+                            {offer.offers.map((offer_, index_) => (
+                              <li key={index_}></li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p>No offers available.</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
               </div>
             </div>
           </Modal.Body>
