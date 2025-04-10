@@ -400,7 +400,7 @@ export default function HotelDetails() {
     console.log(people);
     console.log(type);
     toast.success(
-      "Process booking and payments connecting with External Gateway (PCI-DSS consolidator)"
+      "Process booking and payments when connected with External Gateway (PCI-DSS & consolidator)"
     );
   };
 
