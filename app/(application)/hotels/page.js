@@ -14,10 +14,14 @@ import { useRouter } from "next/navigation";
 import Loader from "@/app/_components/loader";
 
 export default function Flights() {
+  const [isSearched, setIsSearched] = useState(null);
+  const [isSearchedHotels, setIsSearchedHotels] = useState(true);
   const [isLoadingHotels, setIsLoadingHotels] = useState(true);
+  const [searchedHotels, setSearchedHotels] = useState(null);
   const [hotels, setHotels] = useState(null);
   const path = usePathname();
   const router = useRouter();
+  let debounceTimeout = null;
 
   useEffect(() => {
     if (hotels === null) {
@@ -30,7 +34,7 @@ export default function Flights() {
           const resJson = await res.json();
           const hotels = resJson.data;
 
-          const updatedHotels = await Promise.all(
+          const updated = await Promise.all(
             hotels.map(async (hotel) => {
               const name = hotel.name;
               const latLng = `${hotel.geoCode.latitude},${hotel.geoCode.longitude}`;
@@ -44,8 +48,9 @@ export default function Flights() {
             })
           );
 
-          setHotels(updatedHotels);
+          setHotels(updated);
           setIsLoadingHotels(false);
+          setIsSearched(null);
         } catch (error) {
           console.error("Error getting hotels:", error);
         }
@@ -118,10 +123,45 @@ export default function Flights() {
   }
 
   const onSearchHotel = async (q) => {
+    setIsSearched(true);
     const keyword = q.toString().toUpperCase();
+    if (debounceTimeout) clearTimeout(debounceTimeout);
 
-    console.log(keyword);
+    debounceTimeout = setTimeout(async () => {
+      if (keyword.length > 0) {
+        try {
+          const res = await fetch("/api/get_searched_hotels", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ keyword }),
+          });
+          const resJson = await res.json();
+          const hotels = resJson.data;
+
+          const updated = await Promise.all(
+            hotels.map(async (hotel) => {
+              const name = hotel.name;
+              const latLng = `${hotel.geoCode.latitude},${hotel.geoCode.longitude}`;
+
+              const [photos, details] = await Promise.all([
+                fetchPlacePhotos(name, latLng),
+                fetchPlaceDetail(name, latLng),
+              ]);
+
+              return { ...hotel, photos, details };
+            })
+          );
+
+          setSearchedHotels(updated);
+          setIsSearchedHotels(false);
+        } catch (error) {
+          console.error("Error getting searched hotels:", error);
+        }
+      }
+    }, 500);
   };
+
+  console.log(isSearched, isSearchedHotels, searchedHotels);
 
   return (
     <>
@@ -172,7 +212,7 @@ export default function Flights() {
               <div className="col-sm-6">
                 <div className="form-floating">
                   <input
-                    type="text"
+                    type="search"
                     className="form-control cus-form-control"
                     id="search"
                     placeholder="Search For Hotels"
@@ -185,81 +225,167 @@ export default function Flights() {
                 </div>
               </div>
 
-              {isLoadingHotels && hotels === null && (
-                <div className="col-md-12 mt-3 d-flex flex-column justify-content-center align-items-center">
-                  <Loader
-                    style={{
-                      width: 50,
-                      height: 50,
-                      borderTop: "3px solid #333",
-                    }}
-                  />
-                  <p className="mt-3">
-                    Connecting to google maps & loading hotels...
-                  </p>
-                </div>
-              )}
-
-              {!isLoadingHotels &&
-                hotels !== null &&
-                hotels !== undefined &&
-                hotels.length === 0 && (
-                  <div className="col-md-12 mt-3 text-muted text-center">
-                    <Trash size={100} color="black" variant="Bulk" />
-                    <p className="mt-4 mb-0">No hotels yet</p>
-                  </div>
-                )}
-
-              {!isLoadingHotels &&
-                hotels !== null &&
-                hotels !== undefined &&
-                hotels.length > 0 && (
-                  <div className="col-12">
-                    <div className="row mt-5">
-                      {hotels.map((hotel, index) => {
-                        return (
-                          <div
-                            key={index}
-                            onClick={() => {
-                              router.push(`/hotels/result/${hotel.hotelIds[0]}`);
-                            }}
-                            className="col-md-6"
-                          >
-                            <div
-                              className="p-3 mb-3 rounded-4 pe-active d-flex justify-content-between align-items-center"
-                              style={{ background: "#EAF1F8" }}
-                            >
-                              <img
-                                src={
-                                  hotel.photos !== undefined
-                                    ? hotel.photos
-                                    : "/logos/logo_dark.png"
-                                }
-                                alt={hotel.name}
-                                width="250px"
-                                height="150px"
-                                style={{
-                                  minWidth: "200px",
-                                  minHeight: "100px",
-                                }}
-                                className={`rounded-4 me-4 ${
-                                  hotel.photos !== undefined
-                                    ? "object-fit-cover"
-                                    : "object-fit-contain"
-                                }`}
-                              />
-
-                              <div className="w-100 flex-column d-flex justify-content-between">
-                                <h5 className="h5">{hotel.name}</h5>
-                                <p>{hotel.address.cityName}</p>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
+              {isSearched !== null ? (
+                <>
+                  {isSearchedHotels && searchedHotels === null && (
+                    <div className="col-md-12 mt-3 d-flex flex-column justify-content-center align-items-center">
+                      <Loader
+                        style={{
+                          width: 50,
+                          height: 50,
+                          borderTop: "3px solid #333",
+                        }}
+                      />
+                      <p className="mt-3">
+                        Connecting to google maps & loading hotels...
+                      </p>
                     </div>
-                  </div>
-                )}
+                  )}
+
+                  {!isSearchedHotels &&
+                    searchedHotels !== null &&
+                    searchedHotels !== undefined &&
+                    searchedHotels.length === 0 && (
+                      <div className="col-md-12 mt-3 text-muted text-center">
+                        <Trash size={100} color="black" variant="Bulk" />
+                        <p className="mt-4 mb-0">No hotels yet</p>
+                      </div>
+                    )}
+
+                  {!isSearchedHotels &&
+                    searchedHotels !== null &&
+                    searchedHotels !== undefined &&
+                    searchedHotels.length > 0 && (
+                      <div className="col-12">
+                        <div className="row mt-5">
+                          {searchedHotels.map((hotel, index) => {
+                            return (
+                              <div
+                                key={index}
+                                onClick={() => {
+                                  router.push(
+                                    `/hotels/result/${hotel.hotelIds[0]}`
+                                  );
+                                }}
+                                className="col-md-6"
+                              >
+                                <div
+                                  className="p-3 mb-3 rounded-4 pe-active d-flex justify-content-between align-items-center"
+                                  style={{ background: "#EAF1F8" }}
+                                >
+                                  <img
+                                    src={
+                                      hotel.photos !== undefined
+                                        ? hotel.photos
+                                        : "/logos/logo_dark.png"
+                                    }
+                                    alt={hotel.name}
+                                    width="250px"
+                                    height="150px"
+                                    style={{
+                                      minWidth: "200px",
+                                      minHeight: "100px",
+                                    }}
+                                    className={`rounded-4 me-4 ${
+                                      hotel.photos !== undefined
+                                        ? "object-fit-cover"
+                                        : "object-fit-contain"
+                                    }`}
+                                  />
+
+                                  <div className="w-100 flex-column d-flex justify-content-between">
+                                    <h5 className="h5">{hotel.name}</h5>
+                                    <p>{hotel.address.cityName}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                </>
+              ) : (
+                <>
+                  {isLoadingHotels && hotels === null && (
+                    <div className="col-md-12 mt-3 d-flex flex-column justify-content-center align-items-center">
+                      <Loader
+                        style={{
+                          width: 50,
+                          height: 50,
+                          borderTop: "3px solid #333",
+                        }}
+                      />
+                      <p className="mt-3">
+                        Connecting to google maps & loading hotels...
+                      </p>
+                    </div>
+                  )}
+
+                  {!isLoadingHotels &&
+                    hotels !== null &&
+                    hotels !== undefined &&
+                    hotels.length === 0 && (
+                      <div className="col-md-12 mt-3 text-muted text-center">
+                        <Trash size={100} color="black" variant="Bulk" />
+                        <p className="mt-4 mb-0">No hotels yet</p>
+                      </div>
+                    )}
+
+                  {!isLoadingHotels &&
+                    hotels !== null &&
+                    hotels !== undefined &&
+                    hotels.length > 0 && (
+                      <div className="col-12">
+                        <div className="row mt-5">
+                          {hotels.map((hotel, index) => {
+                            return (
+                              <div
+                                key={index}
+                                onClick={() => {
+                                  router.push(
+                                    `/hotels/result/${hotel.hotelIds[0]}`
+                                  );
+                                }}
+                                className="col-md-6"
+                              >
+                                <div
+                                  className="p-3 mb-3 rounded-4 pe-active d-flex justify-content-between align-items-center"
+                                  style={{ background: "#EAF1F8" }}
+                                >
+                                  <img
+                                    src={
+                                      hotel.photos !== undefined
+                                        ? hotel.photos
+                                        : "/logos/logo_dark.png"
+                                    }
+                                    alt={hotel.name}
+                                    width="250px"
+                                    height="150px"
+                                    style={{
+                                      minWidth: "200px",
+                                      minHeight: "100px",
+                                    }}
+                                    className={`rounded-4 me-4 ${
+                                      hotel.photos !== undefined
+                                        ? "object-fit-cover"
+                                        : "object-fit-contain"
+                                    }`}
+                                  />
+
+                                  <div className="w-100 flex-column d-flex justify-content-between">
+                                    <h5 className="h5">{hotel.name}</h5>
+                                    <p>{hotel.address.cityName}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                </>
+              )}
             </div>
           </div>
         </section>

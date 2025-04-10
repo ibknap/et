@@ -24,7 +24,7 @@ const HotelContainer = () => {
           const resJson = await res.json();
           const hotels = resJson.data;
 
-          const updatedHotels = await Promise.all(
+          const updated = await Promise.all(
             hotels.map(async (hotel) => {
               const name = hotel.name;
               const latLng = `${hotel.geoCode.latitude},${hotel.geoCode.longitude}`;
@@ -38,7 +38,7 @@ const HotelContainer = () => {
             })
           );
 
-          setHotels(updatedHotels);
+          setHotels(updated);
           setIsLoadingHotels(false);
         } catch (error) {
           console.error("Error getting hotels:", error);
