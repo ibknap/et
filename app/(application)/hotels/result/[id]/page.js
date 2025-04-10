@@ -399,6 +399,9 @@ export default function HotelDetails() {
     console.log(orderId);
     console.log(people);
     console.log(type);
+    toast.success(
+      "Process booking and payments connecting with External Gateway (PCI-DSS consolidator)"
+    );
   };
 
   return (
@@ -658,7 +661,7 @@ export default function HotelDetails() {
               <div className="row">
                 {hotelOffers.length > 0 &&
                   hotelOffers.map((offer, index) => (
-                    <div key={index} className="col-md-6">
+                    <div key={index} className="col-md-6 px-0">
                       <div className="card mb-3">
                         {offer.offers.length > 0 ? (
                           <ul className="mt-3 list-group list-group-flush">
@@ -672,83 +675,107 @@ export default function HotelDetails() {
                                   </div>
 
                                   <div className="col-6 text-center">
-                                    <div className="shadow-sm rounded p-3 mb-3">
+                                    <div className="shadow-sm rounded p-2 mb-2 border">
                                       <div className="d-flex justify-content-center align-items-center">
-                                        <Paperclip size={24} className="me-2" />{" "}
-                                        <b>Type</b>
+                                        <Paperclip size={20} className="me-2" />{" "}
+                                        <small className="fw-bold">Type</small>
                                       </div>
                                       <hr className="my-1" />
-                                      {offer_.room.type.replaceAll("_", " ")}
+                                      <small>
+                                        {offer_.room.type.replaceAll("_", " ")}
+                                      </small>
                                     </div>
                                   </div>
 
                                   <div className="col-6 text-center">
-                                    <div className="shadow-sm rounded p-3 mb-3">
+                                    <div className="shadow-sm rounded p-2 mb-2 border">
                                       <div className="d-flex justify-content-center align-items-center">
-                                        <Check size={24} className="me-2" />{" "}
-                                        <b>Bed Type</b>
+                                        <Check size={20} className="me-2" />{" "}
+                                        <small className="fw-bold">
+                                          Bed Type
+                                        </small>
                                       </div>
                                       <hr className="my-1" />
-                                      {capitalize(
-                                        offer_.room.typeEstimated.bedType
-                                      ).replaceAll("_", " ")}
+                                      <small>
+                                        {capitalize(
+                                          offer_.room.typeEstimated.bedType
+                                        ).replaceAll("_", " ")}
+                                      </small>
                                     </div>
                                   </div>
 
                                   <div className="col-6 text-center">
-                                    <div className="shadow-sm rounded p-3 mb-3">
+                                    <div className="shadow-sm rounded p-2 mb-2 border">
                                       <div className="d-flex justify-content-center align-items-center">
-                                        <House size={24} className="me-2" />{" "}
-                                        <b>Bed(s)</b>
+                                        <House size={20} className="me-2" />{" "}
+                                        <small className="fw-bold">
+                                          Bed(s)
+                                        </small>
                                       </div>
                                       <hr className="my-1" />
-                                      {offer_.room.typeEstimated.beds}
+                                      <small>
+                                        {offer_.room.typeEstimated.beds}
+                                      </small>
                                     </div>
                                   </div>
 
                                   <div className="col-6 text-center">
-                                    <div className="shadow-sm rounded p-3 mb-3">
+                                    <div className="shadow-sm rounded p-2 mb-2 border">
                                       <div className="d-flex justify-content-center align-items-center">
-                                        <Box size={24} className="me-2" />{" "}
-                                        <b>Category</b>
+                                        <Box size={20} className="me-2" />{" "}
+                                        <small className="fw-bold">
+                                          Category
+                                        </small>
                                       </div>
                                       <hr className="my-1" />
-                                      {capitalize(
-                                        offer_.room.typeEstimated.category
-                                      ).replaceAll("_", " ")}
+                                      <small>
+                                        {capitalize(
+                                          offer_.room.typeEstimated.category
+                                        ).replaceAll("_", " ")}
+                                      </small>
                                     </div>
                                   </div>
 
                                   <div className="col-12 text-center">
-                                    <div className="shadow-sm rounded p-3 mb-3">
+                                    <div className="shadow-sm rounded p-2 mb-2 border">
                                       <div className="d-flex justify-content-center align-items-center">
-                                        <People size={24} className="me-2" />{" "}
-                                        <b>Guests</b>
+                                        <People size={20} className="me-2" />{" "}
+                                        <small className="fw-bold">
+                                          Guests
+                                        </small>
                                       </div>
                                       <hr className="my-1" />
-                                      {offer_.guests.adults}
+                                      <small>{offer_.guests.adults}</small>
                                     </div>
                                   </div>
 
                                   <div className="col-6 text-center">
                                     <div className="shadow-sm rounded p-3 mb-3 border">
                                       <div className="d-flex justify-content-center align-items-center">
-                                        <Calendar2 size={24} className="me-2" />{" "}
-                                        <b>Check In</b>
+                                        <Calendar2 size={20} className="me-2" />{" "}
+                                        <small className="fw-bold">
+                                          Check In
+                                        </small>
                                       </div>
                                       <hr className="my-1" />
-                                      {toDate(offer_.checkInDate)}
+                                      <small>
+                                        {toDate(offer_.checkInDate)}
+                                      </small>
                                     </div>
                                   </div>
 
                                   <div className="col-6 text-center">
                                     <div className="shadow-sm rounded p-3 mb-3 border">
                                       <div className="d-flex justify-content-center align-items-center">
-                                        <Calendar size={24} className="me-2" />{" "}
-                                        <b>Check Out</b>
+                                        <Calendar size={20} className="me-2" />{" "}
+                                        <small className="fw-bold">
+                                          Check Out
+                                        </small>
                                       </div>
                                       <hr className="my-1" />
-                                      {toDate(offer_.checkOutDate)}
+                                      <small>
+                                        {toDate(offer_.checkOutDate)}
+                                      </small>
                                     </div>
                                   </div>
                                 </div>
