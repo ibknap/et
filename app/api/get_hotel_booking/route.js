@@ -4,7 +4,7 @@ import Amadeus from "amadeus";
 export async function POST(req) {
   const clientId = process.env.AMADEUS_TEST_API_KEY;
   const clientSecret = process.env.AMADEUS_TEST_API_SECRET_KEY;
-  const { orderId, adults } = await req.json();
+  const { placeId } = await req.json();
 
   const amadeus = new Amadeus({
     // hostname: "production", TODO: change to live
@@ -13,10 +13,7 @@ export async function POST(req) {
   });
 
   try {
-    const res = await amadeus.shopping.hotelOffersSearch.get({
-      hotelIds: "RTPAR001",
-      adults: "2",
-    });
+    const res = await amadeus.shopping.activity(placeId).get();
 
     const data = res.data;
     return NextResponse.json({ data }, { status: 200 });

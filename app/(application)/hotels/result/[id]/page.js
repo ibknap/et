@@ -395,9 +395,10 @@ export default function HotelDetails() {
     }
   };
 
-  const onBookOrder = (orderId) => {
+  const onBookOrder = (orderId, type) => {
     console.log(orderId);
     console.log(people);
+    console.log(type);
   };
 
   return (
@@ -753,7 +754,9 @@ export default function HotelDetails() {
                                 </div>
 
                                 <button
-                                  onClick={() => onBookOrder(offer_.id)}
+                                  onClick={() => {
+                                    onBookOrder(offer_.id, offer_.type);
+                                  }}
                                   className="btn btn-sm btn-primary shadow w-100 mt-4"
                                 >
                                   Book Now{" "}
