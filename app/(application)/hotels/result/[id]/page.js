@@ -4,13 +4,29 @@ import Navbar from "@/app/_components/navs/navbar";
 import Footer from "@/app/_components/navs/footer";
 import BottomNavbar from "@/app/_components/navs/bottom_navbar";
 import { useState } from "react";
-import { Building, Call, Global, Location, Star1, Trash } from "iconsax-react";
+import {
+  Box,
+  Building,
+  Calendar,
+  Calendar2,
+  Call,
+  Check,
+  Global,
+  House,
+  Location,
+  Paperclip,
+  People,
+  Star1,
+  Trash,
+} from "iconsax-react";
 import Image from "next/image";
 import { Modal } from "react-bootstrap";
 import Link from "next/link";
 import Loader from "@/app/_components/loader";
 import { toast } from "react-toastify";
 import capitalize from "@/app/_utils/capitalize";
+import { toCurrency } from "@/app/_utils/to_currency";
+import { toDate } from "@/app/_utils/to_date";
 
 const hotel = {
   id: 3718191,
@@ -379,6 +395,11 @@ export default function HotelDetails() {
     }
   };
 
+  const onBookOrder = (orderId) => {
+    console.log(orderId);
+    console.log(people);
+  };
+
   return (
     <>
       <Navbar />
@@ -622,7 +643,8 @@ export default function HotelDetails() {
       {hotelOffers !== null && (
         <Modal
           scrollable
-          size="xl"
+          dialogClassName="modal-95w"
+          backdrop="static"
           show={hotelOffers !== null}
           onHide={() => setHotelOffers(null)}
         >
@@ -641,42 +663,109 @@ export default function HotelDetails() {
                           <ul className="mt-3 list-group list-group-flush">
                             {offer.offers.map((offer_, index_) => (
                               <li key={index_} className="list-group-item mb-2">
-                                <div className="mb-1">
-                                  {capitalize(offer_.room.description.text)}
+                                <div className="row">
+                                  <div className="col-12 mb-3">
+                                    <small>
+                                      {capitalize(offer_.room.description.text)}
+                                    </small>
+                                  </div>
+
+                                  <div className="col-6 text-center">
+                                    <div className="shadow-sm rounded p-3 mb-3">
+                                      <div className="d-flex justify-content-center align-items-center">
+                                        <Paperclip size={24} className="me-2" />{" "}
+                                        <b>Type</b>
+                                      </div>
+                                      <hr className="my-1" />
+                                      {offer_.room.type.replaceAll("_", " ")}
+                                    </div>
+                                  </div>
+
+                                  <div className="col-6 text-center">
+                                    <div className="shadow-sm rounded p-3 mb-3">
+                                      <div className="d-flex justify-content-center align-items-center">
+                                        <Check size={24} className="me-2" />{" "}
+                                        <b>Bed Type</b>
+                                      </div>
+                                      <hr className="my-1" />
+                                      {capitalize(
+                                        offer_.room.typeEstimated.bedType
+                                      ).replaceAll("_", " ")}
+                                    </div>
+                                  </div>
+
+                                  <div className="col-6 text-center">
+                                    <div className="shadow-sm rounded p-3 mb-3">
+                                      <div className="d-flex justify-content-center align-items-center">
+                                        <House size={24} className="me-2" />{" "}
+                                        <b>Bed(s)</b>
+                                      </div>
+                                      <hr className="my-1" />
+                                      {offer_.room.typeEstimated.beds}
+                                    </div>
+                                  </div>
+
+                                  <div className="col-6 text-center">
+                                    <div className="shadow-sm rounded p-3 mb-3">
+                                      <div className="d-flex justify-content-center align-items-center">
+                                        <Box size={24} className="me-2" />{" "}
+                                        <b>Category</b>
+                                      </div>
+                                      <hr className="my-1" />
+                                      {capitalize(
+                                        offer_.room.typeEstimated.category
+                                      ).replaceAll("_", " ")}
+                                    </div>
+                                  </div>
+
+                                  <div className="col-12 text-center">
+                                    <div className="shadow-sm rounded p-3 mb-3">
+                                      <div className="d-flex justify-content-center align-items-center">
+                                        <People size={24} className="me-2" />{" "}
+                                        <b>Guests</b>
+                                      </div>
+                                      <hr className="my-1" />
+                                      {offer_.guests.adults}
+                                    </div>
+                                  </div>
+
+                                  <div className="col-6 text-center">
+                                    <div className="shadow-sm rounded p-3 mb-3 border">
+                                      <div className="d-flex justify-content-center align-items-center">
+                                        <Calendar2 size={24} className="me-2" />{" "}
+                                        <b>Check In</b>
+                                      </div>
+                                      <hr className="my-1" />
+                                      {toDate(offer_.checkInDate)}
+                                    </div>
+                                  </div>
+
+                                  <div className="col-6 text-center">
+                                    <div className="shadow-sm rounded p-3 mb-3 border">
+                                      <div className="d-flex justify-content-center align-items-center">
+                                        <Calendar size={24} className="me-2" />{" "}
+                                        <b>Check Out</b>
+                                      </div>
+                                      <hr className="my-1" />
+                                      {toDate(offer_.checkOutDate)}
+                                    </div>
+                                  </div>
                                 </div>
 
-                                <div className="mb-1">
-                                  <b>Amount:</b> {offer_.price.currency}{" "}
-                                  <b>{offer_.price.total}</b>
-                                </div>
-
-                                <div className="mb-1">
-                                  <b>Type:</b>{" "}
-                                  {offer_.room.type.replaceAll("_", " ")}
-                                </div>
-
-                                <div className="mb-1">
-                                  <b>Bed Type:</b>{" "}
-                                  {capitalize(
-                                    offer_.room.typeEstimated.bedType
-                                  ).replaceAll("_", " ")}
-                                </div>
-
-                                <div className="mb-1">
-                                  <b>Bed(s):</b>{" "}
-                                  {offer_.room.typeEstimated.beds}
-                                </div>
-
-                                <div className="mb-1">
-                                  <b>Category:</b>{" "}
-                                  {capitalize(
-                                    offer_.room.typeEstimated.category
-                                  ).replaceAll("_", " ")}
-                                </div>
-
-                                <div className="mb-1">
-                                  <b>guests:</b> {offer_.guests.adults}
-                                </div>
+                                <button
+                                  onClick={() => onBookOrder(offer_.id)}
+                                  className="btn btn-sm btn-primary shadow w-100 mt-4"
+                                >
+                                  Book Now{" "}
+                                  <small className="text-white">
+                                    (
+                                    {toCurrency(
+                                      offer_.price.total,
+                                      offer_.price.currency
+                                    )}
+                                    )
+                                  </small>
+                                </button>
                               </li>
                             ))}
                           </ul>
