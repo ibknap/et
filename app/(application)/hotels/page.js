@@ -161,8 +161,6 @@ export default function Flights() {
     }, 500);
   };
 
-  console.log(isSearched, isSearchedHotels, searchedHotels);
-
   return (
     <>
       <Navbar />

@@ -84,7 +84,6 @@ const FlightSearchModal = ({ showState, onHide }) => {
       infants: infants,
       classType: classType,
     };
-    console.log(info);
 
     try {
       const res = await fetch("/api/get_flight_offers", {
@@ -95,7 +94,6 @@ const FlightSearchModal = ({ showState, onHide }) => {
       const resJson = await res.json();
       const offers = resJson.data;
 
-      console.log(offers);
       setOffers(offers);
       setIsLoading(false);
     } catch (error) {

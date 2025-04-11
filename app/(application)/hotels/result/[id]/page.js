@@ -382,8 +382,6 @@ export default function HotelDetails() {
       const data = resJson.data;
 
       if (data != undefined || data != null) {
-        console.log(data);
-
         setHotelOffers(data);
       } else {
         toast.error("SORRY; No available rooms at the moment!");

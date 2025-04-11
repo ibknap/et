@@ -81,7 +81,6 @@ export default function Flights() {
       infants: infants,
       classType: classType,
     };
-    console.log(info);
 
     try {
       const res = await fetch("/api/get_flight_offers", {
@@ -92,7 +91,6 @@ export default function Flights() {
       const resJson = await res.json();
       const offers = resJson.data;
 
-      console.log(offers);
       setOffers(offers);
       setIsLoading(false);
     } catch (error) {
