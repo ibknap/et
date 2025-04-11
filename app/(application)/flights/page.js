@@ -4,7 +4,7 @@ import Navbar from "@/app/_components/navs/navbar";
 import Footer from "@/app/_components/navs/footer";
 import BottomNavbar from "@/app/_components/navs/bottom_navbar";
 import { useState } from "react";
-import { Form } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import Loader from "@/app/_components/loader";
 
 export default function Flights() {
