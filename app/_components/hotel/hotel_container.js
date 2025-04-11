@@ -247,7 +247,7 @@ const HotelContainer = () => {
                     alt={hotel.name}
                     width="250px"
                     height="150px"
-                    style={{ minWidth: "200px", minHeight: "100px" }}
+                    style={{ minWidth: "100px", minHeight: "100px" }}
                     className={`rounded-4 me-4 ${
                       hotel.photos !== undefined
                         ? "object-fit-cover"

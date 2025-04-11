@@ -34,3 +34,30 @@ export function toDate(dateString) {
 
   return `${day}${ordinalSuffix} ${monthName} ${year}`;
 }
+
+export function getFlightTime(isoString) {
+  const date = new Date(isoString);
+
+  const getOrdinalSuffix = (day) => {
+    if (day > 3 && day < 21) return "th";
+    switch (day % 10) {
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      default:
+        return "th";
+    }
+  };
+
+  const day = date.getDate();
+  const ordinalSuffix = getOrdinalSuffix(day);
+  const month = date.toLocaleString("default", { month: "long" });
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  return `${day}${ordinalSuffix} ${month} ${year} (${hours}:${minutes})`;
+}

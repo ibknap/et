@@ -32,7 +32,6 @@ const Home = () => {
       {show && <OnBoard showState={true} onHide={() => setShow(false)} />}
 
       <FlightSearchBox />
-
       <FlightContainer />
       <PlaceContainer />
       <HotelContainer />

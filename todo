@@ -1,3 +1,3 @@
-- flight search
-- flight booking
-- paypal
+- hotel checkin and out (https://github.com/amadeus4dev/amadeus-code-examples/blob/master/hotel_booking/v2/post/Node%20SDK/hotel_booking.js)
+- hotel booking & payment
+- flight booking & payment
