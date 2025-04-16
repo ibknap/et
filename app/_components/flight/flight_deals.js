@@ -10,6 +10,7 @@ import Loader from "../loader";
 import { useEffect, useState } from "react";
 import { toDateTime } from "@/app/_utils/to_date";
 import { add20Percent, toCurrency } from "@/app/_utils/to_currency";
+import Link from "next/link";
 
 const FlightDeals = () => {
   const [emblaRef] = useEmblaCarousel();
@@ -129,12 +130,12 @@ const FlightDeals = () => {
                       </div>
                     </div>
 
-                    <button
-                      onClick={() => {}}
+                    <Link
+                      href={`/flights/offer/${flight.id}`}
                       className="btn btn-primary w-100 mt-3"
                     >
                       Book
-                    </button>
+                    </Link>
                   </div>
                 </div>
               ))}

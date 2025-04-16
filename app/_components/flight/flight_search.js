@@ -563,7 +563,7 @@ const FlightSearch = () => {
                       <Link
                         key={index}
                         href={`/flights/offer/${offers.id}`}
-                        className="pe-active d-flex mb-3 justify-content-between flex-column w-100 border rounded-3 p-3"
+                        className="pe-active d-flex mb-3 justify-content-between flex-column w-100 border rounded-3 p-3 text-decoration-none"
                       >
                         <div>
                           <div className="d-flex justify-content-between align-items-center">
