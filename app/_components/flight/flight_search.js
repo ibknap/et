@@ -11,6 +11,7 @@ import Image from "next/image";
 import change from "@/public/icons/change.svg";
 import { toFlightTime, toDate } from "@/app/_utils/to_date";
 import { add20Percent, toCurrency } from "@/app/_utils/to_currency";
+import Link from "next/link";
 
 const FlightSearch = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -122,8 +123,6 @@ const FlightSearch = () => {
       });
       const resJson = await res.json();
       const offers = resJson.data;
-
-      console.log(offers);
 
       setOffers(offers);
       setIsLoading(false);
@@ -418,7 +417,7 @@ const FlightSearch = () => {
                         style={{ background: "#f9f8fc" }}
                       >
                         <small className="text-muted">
-                          A child's age must be valid for the full duration of
+                          A child&apos;s age must be valid for the full duration of
                           journey. For example, if a child has a birthday during
                           a trip please use their age on the date of the
                           returning flight.
@@ -561,9 +560,9 @@ const FlightSearch = () => {
                         parseFloat(a.total_amount) - parseFloat(b.total_amount)
                     )
                     .map((offer, index) => (
-                      <div
+                      <Link
                         key={index}
-                        onClick={() => {}}
+                        href={`/flights/offer/${offers.id}`}
                         className="pe-active d-flex mb-3 justify-content-between flex-column w-100 border rounded-3 p-3"
                       >
                         <div>
@@ -640,7 +639,7 @@ const FlightSearch = () => {
                             </h6>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     ))}
                 </div>
               </div>
