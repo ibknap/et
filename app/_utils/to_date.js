@@ -35,7 +35,7 @@ export function toDate(dateString) {
   return `${day}${ordinalSuffix} ${monthName} ${year}`;
 }
 
-export function getFlightTime(isoString) {
+export function toFlightTime(isoString) {
   const date = new Date(isoString);
 
   const getOrdinalSuffix = (day) => {

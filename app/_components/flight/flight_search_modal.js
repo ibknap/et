@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { toCurrency } from "@/app/_utils/to_currency";
 import planeLine from "@/public/images/plane_line.svg";
 import Image from "next/image";
-import { getFlightTime } from "@/app/_utils/to_date";
+import { toFlightTime } from "@/app/_utils/to_date";
 
 const FlightSearchModal = ({ showState, onHide }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -391,7 +391,7 @@ const FlightSearchModal = ({ showState, onHide }) => {
                         <div className="d-flex justify-content-between align-items-center">
                           <h5 className="fw-bold">
                             <h5 className="fw-bold">
-                              {getFlightTime(
+                              {toFlightTime(
                                 offer.itineraries[0].segments[0].departure.at
                               )}
                             </h5>
@@ -403,7 +403,7 @@ const FlightSearchModal = ({ showState, onHide }) => {
                             className="img-responsive w-100"
                           />
                           <h5 className="fw-bold">
-                            {getFlightTime(
+                            {toFlightTime(
                               offer.itineraries[0].segments[0].arrival.at
                             )}
                           </h5>

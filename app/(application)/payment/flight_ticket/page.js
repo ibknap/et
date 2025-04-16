@@ -28,7 +28,7 @@ export default function FlightTicket() {
             >
               <div className="d-flex justify-content-between bg-primary p-3 rounded-top-4">
                 <div>
-                  <h5 className="fw-bold text-dark">SYD</h5>
+                  <h5 className="fw-bold">SYD</h5>
 
                   <small className="fw-light text-white">
                     Sydney, Australia
@@ -43,7 +43,7 @@ export default function FlightTicket() {
                 />
 
                 <div>
-                  <h5 className="fw-bold text-dark">LCY</h5>
+                  <h5 className="fw-bold">LCY</h5>
                   <small className="fw-light text-white">
                     London, United Kingdom
                   </small>

@@ -8,7 +8,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { Trash } from "iconsax-react";
 import Loader from "../loader";
 import { useEffect, useState } from "react";
-import { toDate, toDateTime } from "@/app/_utils/to_date";
+import { toDateTime } from "@/app/_utils/to_date";
 import { add20Percent, toCurrency } from "@/app/_utils/to_currency";
 
 const FlightDeals = () => {
@@ -100,7 +100,7 @@ const FlightDeals = () => {
 
                     <hr />
 
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-between align-items-center">
                       <div>
                         <h6 className="fw-bold">
                           {flight.slices[0].origin.iata_code}
