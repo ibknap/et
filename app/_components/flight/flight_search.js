@@ -325,6 +325,8 @@ const FlightSearch = () => {
                       </label>
 
                       <input
+                        inputmode="numeric"
+                        pattern="[0-9]*"
                         type="number"
                         min="0"
                         aria-describedby="adultsLabel"
@@ -347,6 +349,8 @@ const FlightSearch = () => {
                       </label>
 
                       <input
+                        inputmode="numeric"
+                        pattern="[0-9]*"
                         type="number"
                         min="0"
                         aria-describedby="childrenLengthLabel"
