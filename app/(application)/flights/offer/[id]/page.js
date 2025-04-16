@@ -7,12 +7,37 @@ import logo from "@/public/logos/logo_dark.svg";
 import Image from "next/image";
 import planeLine from "@/public/images/plane_line_down.svg";
 import Loader from "@/app/_components/loader";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 
 export default function FlightDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { id } = useParams();
+
+  useEffect(() => {
+    console.log(id);
+
+    if (id !== null) {
+      async function getApi() {
+        try {
+          const res = await fetch("/api/flight/offer", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id }),
+          });
+          const resJson = await res.json();
+          const offer = resJson.data;
+
+          console.log(offer);
+        } catch (error) {
+          console.error("Error getting flight offer:", error);
+        }
+      }
+
+      getApi();
+    }
+  }, [id]);
 
   return (
     <>

@@ -3,8 +3,6 @@
 import Image from "next/image";
 import logo from "@/public/logos/logo_dark.svg";
 import change from "@/public/icons/change.svg";
-import { useRouter } from "next/navigation";
-import useEmblaCarousel from "embla-carousel-react";
 import { Trash } from "iconsax-react";
 import Loader from "../loader";
 import { useEffect, useState } from "react";
@@ -13,10 +11,8 @@ import { add20Percent, toCurrency } from "@/app/_utils/to_currency";
 import Link from "next/link";
 
 const FlightDeals = () => {
-  const [emblaRef] = useEmblaCarousel();
   const [isLoadingFlights, setIsLoadingFlights] = useState(true);
   const [flights, setFlights] = useState(null);
-  const router = useRouter();
 
   useEffect(() => {
     if (flights === null) {

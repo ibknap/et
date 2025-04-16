@@ -562,7 +562,7 @@ const FlightSearch = () => {
                     .map((offer, index) => (
                       <Link
                         key={index}
-                        href={`/flights/offer/${offers.id}`}
+                        href={`/flights/offer/${offer.id}`}
                         className="pe-active d-flex mb-3 justify-content-between flex-column w-100 border rounded-3 p-3 text-decoration-none"
                       >
                         <div>
