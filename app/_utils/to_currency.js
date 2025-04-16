@@ -168,3 +168,8 @@ export function toCurrency(amount, currency) {
     maximumFractionDigits: 2,
   }).format(amount);
 }
+
+export function add20Percent(amount) {
+  const increased = amount * 1.2;
+  return Number(increased.toFixed(2));
+}

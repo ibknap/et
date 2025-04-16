@@ -61,3 +61,32 @@ export function getFlightTime(isoString) {
 
   return `${day}${ordinalSuffix} ${month} ${year} (${hours}:${minutes})`;
 }
+
+export function toDateTime(isoString) {
+  const date = new Date(isoString);
+
+  // get hours and minutes, zero‑pad to 2 digits
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  // abbreviated month names
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const monthAbbr = months[date.getMonth()];
+
+  const year = date.getFullYear();
+
+  return `${hours}:${minutes} ${monthAbbr} ${year}`;
+}

@@ -15,11 +15,9 @@ body {
 }
 
 .cus-form-control {
-  border-radius: 16px;
-  border: none;
-  background: #eaf1f8;
+  border-radius: 10px;
   display: flex;
-  height: 56px;
+  height: 46px;
   padding: 10px 14px;
   align-items: center;
   gap: 8px;
@@ -37,7 +35,6 @@ body {
 .form-select:active {
   outline: 0;
   border: 0.5px solid #2873ba;
-  background: #f3f7fd;
   box-shadow: 0px 0px 0px 3px #e8f0fd, 0px 1px 2px 0px rgba(0, 0, 0, 0.05) !important;
 }
 
@@ -82,9 +79,9 @@ body {
 /* btn */
 .btn {
   display: flex;
-  height: 56px;
+  height: 46px;
   padding: 4px 24px;
-  border-radius: 16px;
+  border-radius: 10px;
   justify-content: center;
   align-items: center;
   gap: 8px;
@@ -328,8 +325,8 @@ input[type="file"]::file-selector-button {
 }
 
 .form-check-input:checked {
-  background-color: #000 !important;
-  border-color: #000 !important;
+  background-color: #2873ba !important;
+  border-color: #2873ba !important;
 }
 
 .form-check-input:focus {
