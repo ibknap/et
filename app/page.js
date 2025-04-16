@@ -60,7 +60,7 @@ const Home = () => {
             </div>
 
             <div className="col-12 pt-5">
-              <h1 className="text-white display-4 fw-bold">Hi Jenna!</h1>
+              <h1 className="text-white display-4 fw-bold">Hello!</h1>
 
               <p className="text-white fw-light">Where do you want to go?</p>
             </div>
