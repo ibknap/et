@@ -427,4 +427,6 @@ img {
   position: absolute !important;
   top: 116% !important;
   z-index: 99 !important;
+  max-height: 300px;
+  overflow-y: scroll;
 }
