@@ -430,3 +430,12 @@ img {
   max-height: 300px;
   overflow-y: scroll;
 }
+
+.search-close {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 1;
+}

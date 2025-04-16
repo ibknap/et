@@ -9,7 +9,6 @@ import { Trash } from "iconsax-react";
 import Loader from "../loader";
 import { useEffect, useState } from "react";
 import { toDate, toDateTime } from "@/app/_utils/to_date";
-import { toast } from "react-toastify";
 import { add20Percent, toCurrency } from "@/app/_utils/to_currency";
 
 const FlightDeals = () => {
@@ -28,8 +27,6 @@ const FlightDeals = () => {
           });
           const resJson = await res.json();
           const offers = resJson.data;
-
-          console.log(offers[0]);
 
           setFlights(offers);
           setIsLoadingFlights(false);

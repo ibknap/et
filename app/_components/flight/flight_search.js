@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "@/app/_components/loader";
 import { Form } from "react-bootstrap";
 import capitalize from "@/app/_utils/capitalize";
 import { toast } from "react-toastify";
 import FlightDeals from "@/app/_components/flight/flight_deals";
+import { CloseCircle } from "iconsax-react";
 
 const FlightSearch = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,10 +19,22 @@ const FlightSearch = () => {
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
   const [departure, setDeparture] = useState(null);
-  const [returning, setReturning] = useState(null);
+  const [arrival, setArrival] = useState(null);
   const [adults, setAdults] = useState(1);
-  const [children, setChildren] = useState(0);
+  const [children, setChildren] = useState([]);
+  const [childrenLength, setChildrenLength] = useState(0);
   const [cabinClass, setCabinClass] = useState("ECONOMY");
+
+  useEffect(() => {
+    if (childrenLength > 0) {
+      const initChildren = [...Array(parseInt(childrenLength)).keys()].map(
+        (child, index) => ({ id: child + 1, age: 0 })
+      );
+      setChildren(initChildren);
+    } else {
+      setChildren([]);
+    }
+  }, [childrenLength]);
 
   const onSearchOrigin = async (q) => {
     const keyword = q.toString().toUpperCase();
@@ -76,8 +89,9 @@ const FlightSearch = () => {
       origin: origin,
       destination: destination,
       departure: departure,
-      returning: returning,
+      arrival: arrival,
       adults: adults,
+      childrenLength: childrenLength,
       children: children,
       cabinClass: cabinClass,
     };
@@ -97,6 +111,19 @@ const FlightSearch = () => {
       console.error("Error getting flight offers:", error);
       setIsLoading(false);
     }
+  };
+
+  const onChildAgeChange = (id, ageValue) => {
+    setChildren((prev) => {
+      const index = prev.findIndex((child) => child.id === id);
+      if (index !== -1) {
+        const updated = [...prev];
+        updated[index] = { ...updated[index], age: ageValue };
+        return updated;
+      } else {
+        return [...prev, { id, age: ageValue }];
+      }
+    });
   };
 
   return (
@@ -156,15 +183,29 @@ const FlightSearch = () => {
                       Origin
                     </label>
 
-                    <input
-                      type="search"
-                      required
-                      className="form-control cus-form-control"
-                      id="origin"
-                      placeholder="Enter origin"
-                      value={origin}
-                      onChange={(e) => onSearchOrigin(e.target.value)}
-                    />
+                    <div className="position-relative">
+                      <input
+                        type="text"
+                        required
+                        className="form-control cus-form-control"
+                        id="origin"
+                        placeholder="Enter origin"
+                        value={origin}
+                        onChange={(e) => onSearchOrigin(e.target.value)}
+                      />
+
+                      {origin && (
+                        <CloseCircle
+                          variant="Bulk"
+                          color="red"
+                          onClick={() => {
+                            setOrigin("");
+                            setSearchOrigin(null);
+                          }}
+                          className="search-close"
+                        />
+                      )}
+                    </div>
 
                     {searchOrigin !== null && searchOrigin !== undefined && (
                       <div className="card shadow p-2 w-100 search-f-box">
@@ -195,15 +236,29 @@ const FlightSearch = () => {
                       Destination
                     </label>
 
-                    <input
-                      type="search"
-                      required
-                      className="form-control cus-form-control"
-                      id="destination"
-                      placeholder="Enter destination"
-                      value={destination}
-                      onChange={(e) => onSearchDestination(e.target.value)}
-                    />
+                    <div className="position-relative">
+                      <input
+                        type="text"
+                        required
+                        className="form-control cus-form-control"
+                        id="destination"
+                        placeholder="Enter destination"
+                        value={destination}
+                        onChange={(e) => onSearchDestination(e.target.value)}
+                      />
+
+                      {destination && (
+                        <CloseCircle
+                          variant="Bulk"
+                          color="red"
+                          onClick={() => {
+                            setDestination("");
+                            setSearchDestination(null);
+                          }}
+                          className="search-close"
+                        />
+                      )}
+                    </div>
 
                     {searchDestination !== null &&
                       searchDestination !== undefined && (
@@ -257,7 +312,7 @@ const FlightSearch = () => {
                       className="form-control cus-form-control"
                       id="return"
                       placeholder="Return"
-                      onChange={(e) => setReturning(e.target.value)}
+                      onChange={(e) => setArrival(e.target.value)}
                     />
                   </div>
                 )}
@@ -287,32 +342,36 @@ const FlightSearch = () => {
                     </div>
 
                     <div className="col-sm-6 mb-3">
-                      <label className="form-label" htmlFor="children">
+                      <label className="form-label" htmlFor="childrenLength">
                         Children
                       </label>
 
                       <input
                         type="number"
                         min="0"
-                        aria-describedby="childrenLabel"
+                        aria-describedby="childrenLengthLabel"
                         required
                         className="form-control cus-form-control"
-                        id="children"
+                        id="childrenLength"
                         placeholder="Children"
                         defaultValue={0}
-                        onChange={(e) => setChildren(e.target.value)}
+                        onChange={(e) => setChildrenLength(e.target.value)}
                       />
 
-                      <span id="childrenLabel" className="form-text">
+                      <span id="childrenLengthLabel" className="form-text">
                         0 to 18
                       </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="col-sm-6 mb-4">
+                <div
+                  className={
+                    childrenLength > 0 ? "col-sm-6 mb-3" : "col-sm-6 mb-4"
+                  }
+                >
                   <label className="form-label" htmlFor="cabinClass">
-                    Cabin Class
+                    Cabin class
                   </label>
 
                   <select
@@ -321,11 +380,59 @@ const FlightSearch = () => {
                     onChange={(e) => setCabinClass(e.target.value)}
                   >
                     <option value="ECONOMY">Economy</option>
-                    <option value="PREMIUM_ECONOMY">Premium Economy</option>
+                    <option value="PREMIUM_ECONOMY">Premium economy</option>
                     <option value="BUSINESS">Business</option>
                     <option value="FIRST">First</option>
                   </select>
                 </div>
+
+                {childrenLength > 0 && (
+                  <div className="col-12 mb-4">
+                    <div className="row m-2 p-2 rounded-3 border-0 alert alert-dark">
+                      {[...Array(parseInt(childrenLength)).keys()].map(
+                        (child, index) => {
+                          const id = child + 1;
+
+                          return (
+                            <div
+                              key={index}
+                              className={
+                                id === childrenLength
+                                  ? "col-sm-6"
+                                  : "col-sm-6 mb-3"
+                              }
+                            >
+                              <label
+                                className="form-label"
+                                htmlFor={`child${id}Age`}
+                              >
+                                Child {id} age
+                              </label>
+
+                              <select
+                                required
+                                id={`child${id}Age`}
+                                className="form-select cus-form-control"
+                                value={
+                                  children.find((c) => c.id === id)?.age ?? ""
+                                }
+                                onChange={(e) =>
+                                  onChildAgeChange(id, parseInt(e.target.value))
+                                }
+                              >
+                                {[...Array(18).keys()].map((age, index) => (
+                                  <option key={index} value={age}>
+                                    {age}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          );
+                        }
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 <div className="col-12">
                   <button
