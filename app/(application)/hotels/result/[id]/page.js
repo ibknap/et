@@ -394,12 +394,7 @@ export default function HotelDetails() {
   };
 
   const onBookOrder = (orderId, type) => {
-    console.log(orderId);
-    console.log(people);
-    console.log(type);
-    toast.success(
-      "Process booking and payments when connected with External Gateway (PCI-DSS & consolidator)"
-    );
+    toast.success("Coming soon");
   };
 
   return (

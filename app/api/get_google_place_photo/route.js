@@ -13,8 +13,6 @@ export async function POST(req) {
         headers: { Accept: "image/*" },
       });
 
-      console.log(url);
-
       return NextResponse.json({ url: res.url }, { status: 200 });
     } else {
       const urls = await Promise.all(

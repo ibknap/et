@@ -14,13 +14,15 @@ import {
 import { useEffect, useState } from "react";
 import { toDuration, toTime } from "@/app/_utils/to_date";
 import { add20Percent, toCurrency } from "@/app/_utils/to_currency";
-import Link from "next/link";
 import { Form } from "react-bootstrap";
 import capitalize from "@/app/_utils/capitalize";
+import { toast } from "react-toastify";
 
 const FlightOffer = ({ id }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [offer, setOffer] = useState(null);
+  const [passengerDetails, setPassengerDetails] = useState({});
+  const [email, setEmail] = useState("");
+  const [phone, setPhoneNumber] = useState("");
 
   useEffect(() => {
     if (id !== null) {
@@ -34,7 +36,6 @@ const FlightOffer = ({ id }) => {
           const resJson = await res.json();
           const offer = resJson.data;
 
-          console.log(offer);
           setOffer(offer);
         } catch (error) {
           console.error("Error getting flight offer:", error);
@@ -45,10 +46,26 @@ const FlightOffer = ({ id }) => {
     }
   }, [id]);
 
+  const onPassengerChange = (id, field, value) => {
+    setPassengerDetails((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        [field]: value,
+      },
+    }));
+  };
+
+  const onPayment = (e) => {
+    e.preventDefault();
+
+    toast.info("Paypal payment coming soon.");
+  };
+
   return (
     <div className="container-fluid mt-3 mb-5 px-md-5">
       {offer ? (
-        <div className="row justify-content-center">
+        <form onSubmit={onPayment} className="row justify-content-center">
           <div className="col-sm-8 mb-3">
             <h4 className="mb-4">Fare Options</h4>
 
@@ -285,140 +302,202 @@ const FlightOffer = ({ id }) => {
             <hr className="my-5" />
 
             <h5 className="mb-3">Passengers</h5>
-            <div className="mb-3">
-              <span className="rounded-pill px-3 py-1 bg-dark text-white">
-                Adult 1
-              </span>
+            {offer.passengers.map((passenger, index, arr) => {
+              const details = passengerDetails[passenger.id] || {};
+              const typeLabel =
+                passenger.type.charAt(0).toUpperCase() +
+                passenger.type.slice(1);
 
-              <p className="text-muted my-2">Personal details</p>
-              <div className="row">
-                <div className="col-sm-2 mb-3">
-                  <label className="form-label" htmlFor="title">
-                    Title
-                  </label>
+              const number =
+                arr.slice(0, index).filter((p) => p.type === passenger.type)
+                  .length + 1;
 
-                  <select
-                    id="title"
-                    className="form-select cus-form-control"
-                    onChange={(e) => {}}
-                  >
-                    <option value="mr">Mr.</option>
-                    <option value="ms">Ms.</option>
-                    <option value="mrs">Mrs.</option>
-                    <option value="miss">Miss.</option>
-                    <option value="dr">Dr.</option>
-                  </select>
+              return (
+                <div key={passenger.id} className="mb-3">
+                  <span className="rounded-pill px-3 py-1 bg-dark text-white">
+                    {`${typeLabel} ${number}`}
+                  </span>
+
+                  {/* Personal details */}
+                  <p className="text-muted my-2">Personal details</p>
+                  <div className="row">
+                    {/* Title */}
+                    <div className="col-sm-2 mb-3">
+                      <label htmlFor={`title-${passenger.id}`}>Title</label>
+                      <select
+                        id={`title-${passenger.id}`}
+                        value={details.title || ""}
+                        required
+                        className="form-control cus-form-control"
+                        onChange={(e) =>
+                          onPassengerChange(
+                            passenger.id,
+                            "title",
+                            e.target.value
+                          )
+                        }
+                      >
+                        <option value="mr">Mr.</option>
+                        <option value="ms">Ms.</option>
+                        <option value="mrs">Mrs.</option>
+                        <option value="miss">Miss.</option>
+                        <option value="dr">Dr.</option>
+                      </select>
+                    </div>
+
+                    {/* Given Name */}
+                    <div className="col-6 col-md-5 mb-3">
+                      <label htmlFor={`givenName-${passenger.id}`}>
+                        Given name
+                      </label>
+                      <input
+                        id={`givenName-${passenger.id}`}
+                        type="text"
+                        value={details.givenName || ""}
+                        required
+                        className="form-control cus-form-control"
+                        onChange={(e) =>
+                          onPassengerChange(
+                            passenger.id,
+                            "givenName",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </div>
+
+                    {/* Family Name */}
+                    <div className="col-6 col-md-5 mb-3">
+                      <label htmlFor={`familyName-${passenger.id}`}>
+                        Family name
+                      </label>
+                      <input
+                        id={`familyName-${passenger.id}`}
+                        type="text"
+                        value={details.familyName || ""}
+                        required
+                        className="form-control cus-form-control"
+                        onChange={(e) =>
+                          onPassengerChange(
+                            passenger.id,
+                            "familyName",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </div>
+
+                    {/* Date of Birth */}
+                    <div className="col-6 mb-3">
+                      <label htmlFor={`dob-${passenger.id}`}>
+                        Date of birth
+                      </label>
+                      <input
+                        id={`dob-${passenger.id}`}
+                        type="date"
+                        value={details.dob || ""}
+                        required
+                        className="form-control cus-form-control"
+                        onChange={(e) =>
+                          onPassengerChange(passenger.id, "dob", e.target.value)
+                        }
+                      />
+                    </div>
+
+                    {/* Gender */}
+                    <div className="col-6">
+                      <label htmlFor={`gender-${passenger.id}`}>Gender</label>
+                      <select
+                        id={`gender-${passenger.id}`}
+                        value={details.gender || ""}
+                        required
+                        className="form-control cus-form-control"
+                        onChange={(e) =>
+                          onPassengerChange(
+                            passenger.id,
+                            "gender",
+                            e.target.value
+                          )
+                        }
+                      >
+                        <option value="">Select</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Passport details */}
+                  <p className="text-muted my-2">Passport details</p>
+                  <div className="row">
+                    {/* Country */}
+                    <div className="col-12 mb-3">
+                      <label htmlFor={`country-${passenger.id}`}>
+                        Country of issue
+                      </label>
+                      <select
+                        id={`country-${passenger.id}`}
+                        value={details.country || ""}
+                        required
+                        className="form-control cus-form-control"
+                        onChange={(e) =>
+                          onPassengerChange(
+                            passenger.id,
+                            "country",
+                            e.target.value
+                          )
+                        }
+                      >
+                        <option value="">Select</option>
+                        {/* Populate country options as needed */}
+                      </select>
+                    </div>
+
+                    {/* Passport Number */}
+                    <div className="col-6 mb-3">
+                      <label htmlFor={`passportNumber-${passenger.id}`}>
+                        Passport number
+                      </label>
+                      <input
+                        id={`passportNumber-${passenger.id}`}
+                        type="text"
+                        value={details.passportNumber || ""}
+                        required
+                        className="form-control cus-form-control"
+                        onChange={(e) =>
+                          onPassengerChange(
+                            passenger.id,
+                            "passportNumber",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </div>
+
+                    {/* Expiry Date */}
+                    <div className="col-6">
+                      <label htmlFor={`expDate-${passenger.id}`}>
+                        Expiry date
+                      </label>
+                      <input
+                        id={`expDate-${passenger.id}`}
+                        type="date"
+                        value={details.expDate || ""}
+                        required
+                        className="form-control cus-form-control"
+                        onChange={(e) =>
+                          onPassengerChange(
+                            passenger.id,
+                            "expDate",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
                 </div>
-
-                <div className="col-6 col-md-5 mb-3">
-                  <label className="form-label" htmlFor="givenName">
-                    Given name
-                  </label>
-
-                  <input
-                    type="text"
-                    required
-                    className="form-control cus-form-control"
-                    id="givenName"
-                    placeholder="Enter given name"
-                    onChange={(e) => {}}
-                  />
-                </div>
-
-                <div className="col-6 col-md-5 mb-3">
-                  <label className="form-label" htmlFor="familyName">
-                    Family name
-                  </label>
-
-                  <input
-                    type="text"
-                    required
-                    className="form-control cus-form-control"
-                    id="familyName"
-                    placeholder="Enter family name"
-                    onChange={(e) => {}}
-                  />
-                </div>
-
-                <div className="col-6 mb-3">
-                  <label className="form-label" htmlFor="dob">
-                    Date of birth
-                  </label>
-
-                  <input
-                    type="date"
-                    required
-                    className="form-control cus-form-control"
-                    id="dob"
-                    placeholder="select DOB"
-                    onChange={(e) => {}}
-                  />
-                </div>
-
-                <div className="col-6">
-                  <label className="form-label" htmlFor="gender">
-                    Gender
-                  </label>
-
-                  <select
-                    id="gender"
-                    className="form-select cus-form-control"
-                    onChange={(e) => {}}
-                  >
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                  </select>
-                </div>
-              </div>
-
-              <p className="text-muted my-2">Passport details</p>
-              <div className="row">
-                <div className="col-12 mb-3">
-                  <label className="form-label" htmlFor="country">
-                    Country of issue
-                  </label>
-
-                  <select
-                    id="country"
-                    className="form-select cus-form-control"
-                    onChange={(e) => {}}
-                  >
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                  </select>
-                </div>
-
-                <div className="col-6 mb-3">
-                  <label className="form-label" htmlFor="passportNumber">
-                    Passport number
-                  </label>
-
-                  <input
-                    type="text"
-                    required
-                    className="form-control cus-form-control"
-                    id="passportNumber"
-                    placeholder="Enter passport number"
-                    onChange={(e) => {}}
-                  />
-                </div>
-
-                <div className="col-6">
-                  <label className="form-label" htmlFor="expDate">
-                    Expiry date
-                  </label>
-
-                  <input
-                    type="date"
-                    required
-                    className="form-control cus-form-control"
-                    id="expDate"
-                    placeholder="Enter expiry date"
-                    onChange={(e) => {}}
-                  />
-                </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
 
           <div className="col-sm-4">
@@ -552,12 +631,12 @@ const FlightOffer = ({ id }) => {
                 </div>
               </div>
 
-              <Link href="" className="btn btn-sm btn-dark mt-4">
+              <button type="submit" className="btn btn-sm btn-dark mt-4 w-100">
                 Make payment <Card color="white" size={16} />
-              </Link>
+              </button>
             </div>
           </div>
-        </div>
+        </form>
       ) : (
         <div className="row justify-content-center">
           <div className="col-12 text-muted text-center">
