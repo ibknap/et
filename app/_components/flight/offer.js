@@ -17,6 +17,7 @@ import { add20Percent, toCurrency } from "@/app/_utils/to_currency";
 import { Form } from "react-bootstrap";
 import capitalize from "@/app/_utils/capitalize";
 import { toast } from "react-toastify";
+import { countries } from "@/app/_utils/countries";
 
 const FlightOffer = ({ id }) => {
   const [offer, setOffer] = useState(null);
@@ -397,6 +398,7 @@ const FlightOffer = ({ id }) => {
                         type="date"
                         value={details.dob || ""}
                         required
+                        max={new Date().toISOString().split("T")[0]}
                         className="form-control cus-form-control"
                         onChange={(e) =>
                           onPassengerChange(passenger.id, "dob", e.target.value)
@@ -449,6 +451,11 @@ const FlightOffer = ({ id }) => {
                         }
                       >
                         <option value="">Select</option>
+                        {countries.map((country, index) => (
+                          <option key={index} value={country.en.toLowerCase()}>
+                            {country.en}
+                          </option>
+                        ))}
                         {/* Populate country options as needed */}
                       </select>
                     </div>
@@ -482,6 +489,7 @@ const FlightOffer = ({ id }) => {
                       <input
                         id={`expDate-${passenger.id}`}
                         type="date"
+                        min={new Date().toISOString().split("T")[0]}
                         value={details.expDate || ""}
                         required
                         className="form-control cus-form-control"
