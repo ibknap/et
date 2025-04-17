@@ -417,9 +417,9 @@ const FlightSearch = () => {
                         style={{ background: "#f9f8fc" }}
                       >
                         <small className="text-muted">
-                          A child&apos;s age must be valid for the full duration of
-                          journey. For example, if a child has a birthday during
-                          a trip please use their age on the date of the
+                          A child&apos;s age must be valid for the full duration
+                          of journey. For example, if a child has a birthday
+                          during a trip please use their age on the date of the
                           returning flight.
                         </small>
 
@@ -531,16 +531,13 @@ const FlightSearch = () => {
                         className="img-responsive"
                       />
 
-                      {isReturn && (
-                        <div className="d-flex flex-column  text-end">
-                          {destination}
-
-                          <small>{toDate(returning)}</small>
-                        </div>
-                      )}
+                      <div className="d-flex flex-column  text-end">
+                        {destination}
+                        {isReturn && <small>{toDate(returning)}</small>}
+                      </div>
                     </div>
 
-                    <p className=" my-2">{adults.length} Passenger(s)</p>
+                    <p className=" my-2">{adults} Passenger(s)</p>
 
                     <p className=" m-0 mt-2 text-muted">
                       {isReturn ? "Return" : "One Way"} •{" "}
@@ -560,20 +557,17 @@ const FlightSearch = () => {
                         parseFloat(a.total_amount) - parseFloat(b.total_amount)
                     )
                     .map((offer, index) => (
-                      <Link
+                      <div
                         key={index}
-                        href={`/flights/offer/${offer.id}`}
-                        className="pe-active d-flex mb-3 justify-content-between flex-column w-100 border rounded-3 p-3 text-decoration-none"
+                        className="d-flex mb-3 justify-content-between flex-column w-100 border rounded-3 p-3 text-decoration-none"
                       >
                         <div>
                           <div className="d-flex justify-content-between align-items-center">
-                            <h5 className="fw-bold me-3">
-                              <h5 className="fw-bold">
-                                {toFlightTime(
-                                  offer.slices[0].segments[0].departing_at
-                                )}
-                              </h5>
-                            </h5>
+                            <h6 className="fw-bold me-3">
+                              {toFlightTime(
+                                offer.slices[0].segments[0].departing_at
+                              )}
+                            </h6>
 
                             <div className="d-flex flex-column">
                               <Image
@@ -587,11 +581,11 @@ const FlightSearch = () => {
                               {offer.owner.name}
                             </div>
 
-                            <h5 className="fw-bold ms-3">
+                            <h6 className="fw-bold ms-3">
                               {toFlightTime(
                                 offer.slices[0].segments[0].arriving_at
                               )}
-                            </h5>
+                            </h6>
                           </div>
 
                           <div className="d-flex justify-content-between">
@@ -611,13 +605,16 @@ const FlightSearch = () => {
                           <div className="d-flex justify-content-between">
                             {offer.slices[0].segments[0].aircraft ? (
                               <div>
-                                <b>
+                                <small>
                                   {offer.slices[0].segments[0].aircraft.name}
-                                </b>{" "}
-                                ({offer.slices[0].origin.name})
+                                  <br />
+                                  <span className="text-muted">
+                                    ({offer.slices[0].origin.name})
+                                  </span>
+                                </small>
                               </div>
                             ) : (
-                              offer.slices[0].origin.name
+                              <small>{offer.slices[0].origin.name}</small>
                             )}
 
                             <h5 className="fw-bold text-danger">
@@ -639,7 +636,17 @@ const FlightSearch = () => {
                             </h6>
                           </div>
                         </div>
-                      </Link>
+
+                        <hr />
+                        <div className="d-flex justify-content-end">
+                          <Link
+                            href={`/flights/offer/${offer.id}`}
+                            className="btn btn-sm btn-dark"
+                          >
+                            Select Flight
+                          </Link>
+                        </div>
+                      </div>
                     ))}
                 </div>
               </div>
