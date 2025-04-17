@@ -5,7 +5,7 @@ import Loader from "@/app/_components/loader";
 import { Form, Modal } from "react-bootstrap";
 import capitalize from "@/app/_utils/capitalize";
 import { toast } from "react-toastify";
-import FlightDeals from "@/app/_components/flight/flight_deals";
+import FlightDeals from "@/app/_components/flight/deals";
 import { CloseCircle } from "iconsax-react";
 import Image from "next/image";
 import change from "@/public/icons/change.svg";
