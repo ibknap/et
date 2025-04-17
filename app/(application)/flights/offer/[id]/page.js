@@ -16,8 +16,6 @@ export default function FlightDetails() {
   const { id } = useParams();
 
   useEffect(() => {
-    console.log(id);
-
     if (id !== null) {
       async function getApi() {
         try {

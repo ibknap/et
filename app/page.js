@@ -69,7 +69,6 @@ const Home = () => {
       </section>
 
       <FlightSearch />
-
       <PlaceContainer />
       <HotelContainer />
       <Footer />
