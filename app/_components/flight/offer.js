@@ -1,20 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import logo from "@/public/logos/logo_dark.svg";
-import change from "@/public/icons/change.svg";
 import {
-  ArrowRight,
+  AirplaneSquare,
   Bag,
+  Card,
   Clock,
   CloseSquare,
   Cloud,
   ShoppingBag,
   Trash,
 } from "iconsax-react";
-import Loader from "../loader";
 import { useEffect, useState } from "react";
-import { toDateTime, toDuration, toTime } from "@/app/_utils/to_date";
+import { toDuration, toTime } from "@/app/_utils/to_date";
 import { add20Percent, toCurrency } from "@/app/_utils/to_currency";
 import Link from "next/link";
 import { Form } from "react-bootstrap";
@@ -48,11 +46,11 @@ const FlightOffer = ({ id }) => {
   }, [id]);
 
   return (
-    <div className="container my-5 px-md-5">
+    <div className="container-fluid mt-3 mb-5 px-md-5">
       {offer ? (
         <div className="row justify-content-center">
-          <div className="col-sm-9 mb-3">
-            <h4 className="mb-4">Fare options</h4>
+          <div className="col-sm-8 mb-3">
+            <h4 className="mb-4">Fare Options</h4>
 
             <div className="mb-5">
               <div className="mb-2">
@@ -61,6 +59,7 @@ const FlightOffer = ({ id }) => {
                 <small className="text-muted">
                   ({offer.slices[0].segments[0].origin.name})
                 </small>
+                , Terminal {offer.slices[0].segments[0].origin_terminal}
               </div>
 
               <div className="mb-2">
@@ -68,6 +67,7 @@ const FlightOffer = ({ id }) => {
                 <small className="text-muted">
                   ({offer.slices[0].segments[0].destination.name})
                 </small>
+                , Terminal {offer.slices[0].segments[0].destination_terminal}
               </div>
 
               <div>
@@ -184,13 +184,130 @@ const FlightOffer = ({ id }) => {
               >
                 Total amount
                 <h5 className="mb-0 text-black">
-                  {toCurrency(offer.total_amount, offer.total_currency)}
+                  {toCurrency(
+                    add20Percent(offer.total_amount),
+                    offer.total_currency
+                  )}
                 </h5>
+              </div>
+            </div>
+
+            <h4 className="mt-5 mb-4">Checkout</h4>
+
+            <div className="row d-flex justify-content-between">
+              <div className="col-sm-6">
+                <div className="card p-3 mb-3 mb-md-0">
+                  <div className="d-flex h-100">
+                    <AirplaneSquare className="me-3" variant="Bulk" />
+
+                    <div className="d-flex flex-column">
+                      <p className="fw-bold mb-2">Order change policy</p>
+                      <small className="text-muted">
+                        This order is not changeable.
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-sm-6">
+                <div className="card p-3">
+                  <div className="d-flex h-100">
+                    <AirplaneSquare className="me-3" variant="Bulk" />
+
+                    <div className="d-flex flex-column">
+                      <p className="fw-bold mb-2">Order refund policy</p>
+                      <small className="text-muted">
+                        This order is not refundable.
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr className="my-5" />
+
+            <h5 className="mt-5 mb-3">Paying now, or later?</h5>
+            <small className="text-muted">
+              Decide whether you want to pay for your trip now in its entirety,
+              or whether you'd like to put a hold on the order, and pay at a
+              later date. Be aware that you cannot currently select seats or
+              baggage when holding an order.
+            </small>
+
+            <div className="row d-flex justify-content-between mt-4">
+              <div className="col-sm-6">
+                <div
+                  className="card border-0 p-3 mb-3 mb-md-0 pe-active"
+                  style={{ background: "#2873ba20" }}
+                >
+                  <div className="d-flex h-100">
+                    <Form.Check
+                      type="radio"
+                      checked={true}
+                      onChange={() => {}}
+                    />
+
+                    <div className="d-flex flex-column ms-3">
+                      <p className="fw-bold mb-2">Pay now</p>
+                      <small className="text-muted">
+                        Pay now and confirm seat and baggage selection
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-sm-6">
+                <div
+                  className="card border-0 p-3"
+                  style={{ background: "#f9f8fc" }}
+                >
+                  <div className="d-flex h-100">
+                    <Form.Check
+                      type="radio"
+                      checked={false}
+                      onChange={() => {}}
+                    />
+
+                    <div className="d-flex flex-column ms-3">
+                      <p className="fw-bold mb-2">Hold order</p>
+                      <small className="text-muted">
+                        Hold price and space and pay at a later date
+                      </small>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="col-sm-3">
+          <div className="col-sm-4">
+            <h5>Contact Details</h5>
+
+            <div className="mb-3">
+              <input
+                type="email"
+                required
+                className="form-control cus-form-control"
+                id="email"
+                placeholder="Enter email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <div className="mb-4">
+              <input
+                type="text"
+                required
+                className="form-control cus-form-control"
+                id="phoneNumber"
+                placeholder="Enter phone number (+1 234 567 8901)"
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+            </div>
+
             <div
               className="rounded-3 border-0 alert alert-dark m-0"
               style={{ background: "#f9f8fc" }}
@@ -265,8 +382,40 @@ const FlightOffer = ({ id }) => {
                 </li>
               </ul>
 
+              <hr />
+
+              <div>
+                <div className="d-flex justify-content-between mb-2">
+                  Fare
+                  <b className="ms-2">
+                    {toCurrency(
+                      add20Percent(offer.base_amount),
+                      offer.base_currency
+                    )}
+                  </b>
+                </div>
+                <div className="d-flex justify-content-between mb-2">
+                  Fare Tax
+                  <b className="ms-2">
+                    {toCurrency(
+                      add20Percent(offer.tax_amount),
+                      offer.tax_currency
+                    )}
+                  </b>
+                </div>
+                <div className="d-flex justify-content-between mb-2">
+                  TOTAL ({offer.total_currency})
+                  <h5 className="mb-0 text-danger">
+                    {toCurrency(
+                      add20Percent(offer.total_amount),
+                      offer.total_currency
+                    )}
+                  </h5>
+                </div>
+              </div>
+
               <Link href="" className="btn btn-sm btn-dark mt-4">
-                Go to checkout <ArrowRight color="white" size={16} />
+                Make payment <Card color="white" size={16} />
               </Link>
             </div>
           </div>
