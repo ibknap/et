@@ -231,8 +231,8 @@ const FlightOffer = ({ id }) => {
             <h5 className="mb-3">Paying now, or later?</h5>
             <small className="text-muted">
               Decide whether you want to pay for your trip now in its entirety,
-              or whether you&apos;d like to put a hold on the order, and pay at a
-              later date. Be aware that you cannot currently select seats or
+              or whether you&apos;d like to put a hold on the order, and pay at
+              a later date. Be aware that you cannot currently select seats or
               baggage when holding an order.
             </small>
 
@@ -285,6 +285,140 @@ const FlightOffer = ({ id }) => {
             <hr className="my-5" />
 
             <h5 className="mb-3">Passengers</h5>
+            <div className="mb-3">
+              <span className="rounded-pill px-3 py-1 bg-dark text-white">
+                Adult 1
+              </span>
+
+              <p className="text-muted my-2">Personal details</p>
+              <div className="row">
+                <div className="col-sm-2 mb-3">
+                  <label className="form-label" htmlFor="title">
+                    Title
+                  </label>
+
+                  <select
+                    id="title"
+                    className="form-select cus-form-control"
+                    onChange={(e) => {}}
+                  >
+                    <option value="mr">Mr.</option>
+                    <option value="ms">Ms.</option>
+                    <option value="mrs">Mrs.</option>
+                    <option value="miss">Miss.</option>
+                    <option value="dr">Dr.</option>
+                  </select>
+                </div>
+
+                <div className="col-6 col-md-5 mb-3">
+                  <label className="form-label" htmlFor="givenName">
+                    Given name
+                  </label>
+
+                  <input
+                    type="text"
+                    required
+                    className="form-control cus-form-control"
+                    id="givenName"
+                    placeholder="Enter given name"
+                    onChange={(e) => {}}
+                  />
+                </div>
+
+                <div className="col-6 col-md-5 mb-3">
+                  <label className="form-label" htmlFor="familyName">
+                    Family name
+                  </label>
+
+                  <input
+                    type="text"
+                    required
+                    className="form-control cus-form-control"
+                    id="familyName"
+                    placeholder="Enter family name"
+                    onChange={(e) => {}}
+                  />
+                </div>
+
+                <div className="col-6 mb-3">
+                  <label className="form-label" htmlFor="dob">
+                    Date of birth
+                  </label>
+
+                  <input
+                    type="date"
+                    required
+                    className="form-control cus-form-control"
+                    id="dob"
+                    placeholder="select DOB"
+                    onChange={(e) => {}}
+                  />
+                </div>
+
+                <div className="col-6">
+                  <label className="form-label" htmlFor="gender">
+                    Gender
+                  </label>
+
+                  <select
+                    id="gender"
+                    className="form-select cus-form-control"
+                    onChange={(e) => {}}
+                  >
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+              </div>
+
+              <p className="text-muted my-2">Passport details</p>
+              <div className="row">
+                <div className="col-12 mb-3">
+                  <label className="form-label" htmlFor="country">
+                    Country of issue
+                  </label>
+
+                  <select
+                    id="country"
+                    className="form-select cus-form-control"
+                    onChange={(e) => {}}
+                  >
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+
+                <div className="col-6 mb-3">
+                  <label className="form-label" htmlFor="passportNumber">
+                    Passport number
+                  </label>
+
+                  <input
+                    type="text"
+                    required
+                    className="form-control cus-form-control"
+                    id="passportNumber"
+                    placeholder="Enter passport number"
+                    onChange={(e) => {}}
+                  />
+                </div>
+
+                <div className="col-6">
+                  <label className="form-label" htmlFor="expDate">
+                    Expiry date
+                  </label>
+
+                  <input
+                    type="date"
+                    required
+                    className="form-control cus-form-control"
+                    id="expDate"
+                    placeholder="Enter expiry date"
+                    onChange={(e) => {}}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="col-sm-4">
