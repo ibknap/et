@@ -439,3 +439,18 @@ img {
   cursor: pointer;
   z-index: 1;
 }
+
+.flight-line {
+  height: 2px;
+  background: #ededf3;
+  width: 100%;
+  margin-right: 2px;
+  position: relative;
+}
+
+.flight-line-plane {
+  transform: rotate(90deg);
+  color: #ccccd4;
+  fill: #ccccd4;
+  display: block;
+}

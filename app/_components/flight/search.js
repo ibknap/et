@@ -413,7 +413,7 @@ const FlightSearch = () => {
                   {childrenLength > 0 && (
                     <div className="col-12 mb-4">
                       <div
-                        className="row m-2 p-2 rounded-3 border-0 alert alert-dark"
+                        className="row m-2 p-2 rounded-3 border-0 alert alert-dark m-0"
                         style={{ background: "#f9f8fc" }}
                       >
                         <small className="text-muted">

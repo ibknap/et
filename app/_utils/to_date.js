@@ -90,3 +90,22 @@ export function toDateTime(isoString) {
 
   return `${hours}:${minutes} ${monthAbbr} ${year}`;
 }
+
+export function toDuration(isoDuration) {
+  const pattern =
+    /^P(?:\d+Y)?(?:\d+M)?(?:\d+W)?(?:\d+D)?T(?:(\d+)H)?(?:(\d+)M)?/;
+  const match = isoDuration.match(pattern);
+  if (!match) return "";
+
+  const [, hours = "0", minutes = "0"] = match;
+  const parts = [];
+  if (parseInt(hours, 10) > 0) parts.push(`${hours}h`);
+  if (parseInt(minutes, 10) > 0) parts.push(`${minutes}m`);
+
+  return parts.join(" ") || "0m";
+}
+
+export function toTime(isoDateTime) {
+  const [, timePart] = isoDateTime.split("T");
+  return timePart.slice(0, 5);
+}
