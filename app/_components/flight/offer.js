@@ -228,10 +228,10 @@ const FlightOffer = ({ id }) => {
 
             <hr className="my-5" />
 
-            <h5 className="mt-5 mb-3">Paying now, or later?</h5>
+            <h5 className="mb-3">Paying now, or later?</h5>
             <small className="text-muted">
               Decide whether you want to pay for your trip now in its entirety,
-              or whether you'd like to put a hold on the order, and pay at a
+              or whether you&apos;d like to put a hold on the order, and pay at a
               later date. Be aware that you cannot currently select seats or
               baggage when holding an order.
             </small>
@@ -281,6 +281,10 @@ const FlightOffer = ({ id }) => {
                 </div>
               </div>
             </div>
+
+            <hr className="my-5" />
+
+            <h5 className="mb-3">Passengers</h5>
           </div>
 
           <div className="col-sm-4">
