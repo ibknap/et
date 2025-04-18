@@ -938,19 +938,7 @@ const FlightOffer = ({ id }) => {
                 </div>
               </div>
 
-              <PayPalScriptProvider
-                options={{
-                  clientId: process.env.NEXT_PUBLIC_PAYPAL_TEST_CLIENT_ID,
-                  currency: offer.total_currency,
-                }}
-              >
-                <PaypalLoadingState />
-                <PayPalButtons
-                  createOrder={() => onPaypalCreateOrder()}
-                  onApprove={(data, actions) => onPaypalApprove(data, actions)}
-                />
-              </PayPalScriptProvider>
-              {/* {showPaypal ? (
+              {showPaypal ? (
                 <div className="mt-4">
                   <PayPalScriptProvider
                     options={{
@@ -973,7 +961,7 @@ const FlightOffer = ({ id }) => {
                 >
                   Make payment <Card color="white" size={16} />
                 </button>
-              )} */}
+              )}
             </div>
           </div>
         </form>
