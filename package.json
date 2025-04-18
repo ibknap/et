@@ -11,6 +11,7 @@
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
     "@duffel/api": "^4.11.0",
+    "@paypal/react-paypal-js": "^8.8.3",
     "amadeus": "^11.0.0",
     "bootstrap": "^5.3.3",
     "dompurify": "^3.2.4",

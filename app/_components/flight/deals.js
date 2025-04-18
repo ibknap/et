@@ -27,9 +27,7 @@ const FlightDeals = () => {
 
           setFlights(offers);
           setIsLoadingFlights(false);
-        } catch (error) {
-          console.error("Error getting random flights:", error);
-        }
+        } catch (error) {}
       }
 
       getApi();

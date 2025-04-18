@@ -18,6 +18,12 @@ import { Form } from "react-bootstrap";
 import capitalize from "@/app/_utils/capitalize";
 import { toast } from "react-toastify";
 import { countries } from "@/app/_utils/countries";
+import {
+  PayPalScriptProvider,
+  PayPalButtons,
+  usePayPalScriptReducer,
+} from "@paypal/react-paypal-js";
+import Loader from "../loader";
 
 const FlightOffer = ({ id }) => {
   const [offer, setOffer] = useState(null);
@@ -25,6 +31,7 @@ const FlightOffer = ({ id }) => {
   const [email, setEmail] = useState("");
   const [phone, setPhoneNumber] = useState("");
   const [isReturn, setIsReturn] = useState(false);
+  const [showPaypal, setShowPaypal] = useState(false);
 
   useEffect(() => {
     if (id !== null) {
@@ -41,9 +48,7 @@ const FlightOffer = ({ id }) => {
 
           setOffer(offer);
           setIsReturn(isReturn_);
-        } catch (error) {
-          console.error("Error getting flight offer:", error);
-        }
+        } catch (error) {}
       }
 
       getApi();
@@ -60,16 +65,116 @@ const FlightOffer = ({ id }) => {
     }));
   };
 
-  const onPayment = (e) => {
+  const onShowPaypal = (e) => {
     e.preventDefault();
+    setShowPaypal(true);
+  };
 
-    toast.info("Paypal payment coming soon.");
+  const onPaypalCreateOrder = async () => {
+    try {
+      const info = {
+        intent: "CAPTURE",
+        purchase_units: [
+          {
+            amount: {
+              currency_code: offer.total_currency,
+              value: add20Percent(offer.total_amount),
+            },
+          },
+        ],
+        cart: [
+          {
+            id: offer.id,
+            quantity: "1",
+          },
+        ],
+      };
+
+      const res = await fetch("/api/paypal/create_order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ info }),
+      });
+
+      if (!res.ok) toast.error("Could not create PayPal order");
+
+      const resJson = await res.json();
+      const order = resJson.data;
+
+      if (order.id) {
+        return order.id;
+      } else {
+        const errorDetail = order?.details?.[0];
+        const errorMessage = errorDetail
+          ? `${errorDetail.issue} ${errorDetail.description} (${order.debug_id})`
+          : JSON.stringify(order);
+
+        toast.error(errorMessage);
+      }
+    } catch (error) {
+      console.log(error);
+
+      toast.error(`Could not initiate PayPal Checkout...${error}`);
+    }
+  };
+
+  const onPaypalApprove = async (data, actions) => {
+    try {
+      const res = await fetch("/api/paypal/approve", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data, actions }),
+      });
+
+      if (!res.ok) toast.error("Could not create PayPal order");
+
+      const resJson = await res.json();
+      const order = resJson.data;
+
+      if (order.status === "COMPLETED") {
+        toast.success(
+          "Payment completed. You will receive your Itinerary in your email."
+        );
+      } else {
+        toast.error(
+          `Sorry, your transaction could not be processed...${error}`
+        );
+      }
+    } catch (error) {
+      toast.error(`Sorry, your transaction could not be processed...${error}`);
+    }
+  };
+
+  const PaypalLoadingState = () => {
+    const [{ isPending, isRejected }] = usePayPalScriptReducer();
+
+    if (isPending) {
+      return (
+        <div className="d-flex justify-content-center mt-4">
+          <Loader className="me-2" /> Loading PayPal
+        </div>
+      );
+    }
+
+    if (isRejected) {
+      return (
+        <div className="d-flex justify-content-center mt-4">
+          Error while loading PayPal
+        </div>
+      );
+    }
+
+    return null;
   };
 
   return (
     <div className="container-fluid mt-3 mb-5 px-md-5">
       {offer ? (
-        <form onSubmit={onPayment} className="row justify-content-center">
+        <form onSubmit={onShowPaypal} className="row justify-content-center">
           <div className="col-sm-8 mb-3">
             <h4 className="mb-4">Fare Options</h4>
 
@@ -833,9 +938,42 @@ const FlightOffer = ({ id }) => {
                 </div>
               </div>
 
-              <button type="submit" className="btn btn-sm btn-dark mt-4 w-100">
-                Make payment <Card color="white" size={16} />
-              </button>
+              <PayPalScriptProvider
+                options={{
+                  clientId: process.env.NEXT_PUBLIC_PAYPAL_TEST_CLIENT_ID,
+                  currency: offer.total_currency,
+                }}
+              >
+                <PaypalLoadingState />
+                <PayPalButtons
+                  createOrder={() => onPaypalCreateOrder()}
+                  onApprove={(data, actions) => onPaypalApprove(data, actions)}
+                />
+              </PayPalScriptProvider>
+              {/* {showPaypal ? (
+                <div className="mt-4">
+                  <PayPalScriptProvider
+                    options={{
+                      clientId: process.env.NEXT_PUBLIC_PAYPAL_TEST_CLIENT_ID,
+                    }}
+                  >
+                    <PaypalLoadingState />
+                    <PayPalButtons
+                      createOrder={() => onPaypalCreateOrder()}
+                      onApprove={(data, actions) =>
+                        onPaypalApprove(data, actions)
+                      }
+                    />
+                  </PayPalScriptProvider>
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  className="btn btn-sm btn-dark mt-4 w-100"
+                >
+                  Make payment <Card color="white" size={16} />
+                </button>
+              )} */}
             </div>
           </div>
         </form>

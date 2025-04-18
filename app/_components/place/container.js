@@ -27,9 +27,7 @@ const PlaceContainer = () => {
 
           setPlaces(data);
           setIsLoadingPlaces(false);
-        } catch (error) {
-          console.error("Error getting places:", error);
-        }
+        } catch (error) {}
       }
 
       getApi();

@@ -51,9 +51,7 @@ export default function Flights() {
           setHotels(updated);
           setIsLoadingHotels(false);
           setIsSearched(null);
-        } catch (error) {
-          console.error("Error getting hotels:", error);
-        }
+        } catch (error) {}
       }
 
       getApi();
@@ -88,12 +86,7 @@ export default function Flights() {
       const { url } = await photoRes.json();
 
       return url;
-    } catch (error) {
-      console.error(
-        "An error occurred while fetching the Google place photo.",
-        error
-      );
-    }
+    } catch (error) {}
   }
 
   async function fetchPlaceDetail(name, latLng) {
@@ -114,12 +107,7 @@ export default function Flights() {
       });
       const { data } = await placeDetailRes.json();
       return data;
-    } catch (error) {
-      console.error(
-        "An error occurred while fetching the Google place detail.",
-        error
-      );
-    }
+    } catch (error) {}
   }
 
   const onSearchHotel = async (q) => {
@@ -154,9 +142,7 @@ export default function Flights() {
 
           setSearchedHotels(updated);
           setIsSearchedHotels(false);
-        } catch (error) {
-          console.error("Error getting searched hotels:", error);
-        }
+        } catch (error) {}
       }
     }, 500);
   };

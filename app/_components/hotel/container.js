@@ -40,9 +40,7 @@ const HotelContainer = () => {
 
           setHotels(updated);
           setIsLoadingHotels(false);
-        } catch (error) {
-          console.error("Error getting hotels:", error);
-        }
+        } catch (error) {}
       }
 
       getApi();
@@ -77,12 +75,7 @@ const HotelContainer = () => {
       const { url } = await photoRes.json();
 
       return url;
-    } catch (error) {
-      console.error(
-        "An error occurred while fetching the Google place photo.",
-        error
-      );
-    }
+    } catch (error) {}
   }
 
   async function fetchPlaceDetail(name, latLng) {
@@ -103,12 +96,7 @@ const HotelContainer = () => {
       });
       const { data } = await placeDetailRes.json();
       return data;
-    } catch (error) {
-      console.error(
-        "An error occurred while fetching the Google place detail.",
-        error
-      );
-    }
+    } catch (error) {}
   }
 
   return (

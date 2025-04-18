@@ -32,9 +32,7 @@ export default function PlaceDetail() {
 
           setPlace(data);
           setIsLoading(false);
-        } catch (error) {
-          console.error("Error getting place:", error);
-        }
+        } catch (error) {}
       }
 
       getApi();
