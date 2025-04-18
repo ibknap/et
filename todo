@@ -1,0 +1,2 @@
+- calling paypal
+- ⁠calling booking(all data will be send to ET so ET can book manually via duffel) after paypal return success

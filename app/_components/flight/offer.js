@@ -12,7 +12,7 @@ import {
   Trash,
 } from "iconsax-react";
 import { useEffect, useState } from "react";
-import { toDuration, toTime } from "@/app/_utils/to_date";
+import { toDuration, toFlightTime, toTime } from "@/app/_utils/to_date";
 import { add20Percent, toCurrency } from "@/app/_utils/to_currency";
 import { Form } from "react-bootstrap";
 import capitalize from "@/app/_utils/capitalize";
@@ -24,6 +24,7 @@ const FlightOffer = ({ id }) => {
   const [passengerDetails, setPassengerDetails] = useState({});
   const [email, setEmail] = useState("");
   const [phone, setPhoneNumber] = useState("");
+  const [isReturn, setIsReturn] = useState(false);
 
   useEffect(() => {
     if (id !== null) {
@@ -36,8 +37,10 @@ const FlightOffer = ({ id }) => {
           });
           const resJson = await res.json();
           const offer = resJson.data;
+          const isReturn_ = offer.slices.length > 1;
 
           setOffer(offer);
+          setIsReturn(isReturn_);
         } catch (error) {
           console.error("Error getting flight offer:", error);
         }
@@ -70,145 +73,336 @@ const FlightOffer = ({ id }) => {
           <div className="col-sm-8 mb-3">
             <h4 className="mb-4">Fare Options</h4>
 
-            <div className="mb-5">
-              <div className="mb-2">
-                Flight from{" "}
-                <b>{offer.slices[0].segments[0].origin.iata_code}</b>{" "}
-                <small className="text-muted">
-                  ({offer.slices[0].segments[0].origin.name})
-                </small>
-                , Terminal {offer.slices[0].segments[0].origin_terminal}
-              </div>
-
-              <div className="mb-2">
-                To <b>{offer.slices[0].segments[0].destination.iata_code}</b>{" "}
-                <small className="text-muted">
-                  ({offer.slices[0].segments[0].destination.name})
-                </small>
-                , Terminal {offer.slices[0].segments[0].destination_terminal}
-              </div>
-
-              <div>
-                On <b className="text-muted">20 Apr 2025</b>
-              </div>
-            </div>
-
-            <div className="mb-5">
-              <div className="d-flex justify-content-between align-items-center">
-                <div className="d-flex flex-column me-3">
-                  <Image
-                    src={offer.owner.logo_symbol_url}
-                    width={46}
-                    height={46}
-                    priority
-                    alt="airline"
-                    className="img-responsive mb-2"
-                  />
-                  <small>{offer.owner.name}</small>
+            <>
+              <div className="mb-5">
+                <div className="mb-2">
+                  {isReturn && (
+                    <>
+                      <span className="fw-bold alert alert-danger rounded-pill p-2">
+                        Outbound
+                      </span>
+                      <br />
+                      <br />
+                    </>
+                  )}
+                  Flight from
+                  <b className="ms-2">
+                    {offer.slices[0].segments[0].origin.iata_code}
+                  </b>
+                  <small className="text-muted ms-2">
+                    ({offer.slices[0].segments[0].origin.name})
+                  </small>
+                  , Terminal {offer.slices[0].segments[0].origin_terminal}
                 </div>
 
-                <div className="d-flex justify-content-between align-items-center w-100">
+                <div className="mb-2">
+                  To
+                  <b className="ms-2">
+                    {offer.slices[0].segments[0].destination.iata_code}
+                  </b>
+                  <small className="text-muted ms-2">
+                    ({offer.slices[0].segments[0].destination.name})
+                  </small>
+                  , Terminal {offer.slices[0].segments[0].destination_terminal}
+                </div>
+
+                <div>
+                  On
+                  <b className="text-muted ms-2">
+                    {toFlightTime(offer.slices[0].segments[0].departing_at)}
+                  </b>
+                </div>
+              </div>
+
+              <div className="mb-5">
+                <div className="d-flex justify-content-between align-items-center">
                   <div className="d-flex flex-column me-3">
-                    <b>{toTime(offer.slices[0].segments[0].departing_at)}</b>
-                    <span className="text-muted mt-2">
-                      {offer.slices[0].segments[0].origin.iata_code}
-                    </span>
+                    <Image
+                      src={offer.owner.logo_symbol_url}
+                      width={46}
+                      height={46}
+                      priority
+                      alt="airline"
+                      className="img-responsive mb-2"
+                    />
+                    <small>{offer.owner.name}</small>
                   </div>
 
-                  <div className="d-flex flex-column align-items-center w-100">
-                    <small className="text-muted">
-                      {toDuration(offer.slices[0].duration)}
-                    </small>
-
-                    <div className="d-flex w-100">
-                      <div className="flight-line my-2" />
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        className="flight-line-plane ms-2"
-                      >
-                        <path d="M8.5 22V20.5L10.5 19V13.5L2 16V14L10.5 9V3.5C10.5 3.06667 10.6417 2.70833 10.925 2.425C11.2083 2.14167 11.5667 2 12 2C12.4333 2 12.7917 2.14167 13.075 2.425C13.3583 2.70833 13.5 3.06667 13.5 3.5V9L22 14V16L13.5 13.5V19L15.5 20.5V22L12 21L8.5 22Z"></path>
-                      </svg>
+                  <div className="d-flex justify-content-between align-items-center w-100">
+                    <div className="d-flex flex-column me-3">
+                      <b>{toTime(offer.slices[0].segments[0].departing_at)}</b>
+                      <span className="text-muted mt-2">
+                        {offer.slices[0].segments[0].origin.iata_code}
+                      </span>
                     </div>
 
-                    <small className="text-muted">Direct</small>
-                  </div>
+                    <div className="d-flex flex-column align-items-center w-100">
+                      <small className="text-muted">
+                        {toDuration(offer.slices[0].duration)}
+                      </small>
 
-                  <div className="d-flex flex-column ms-3">
-                    <b>{toTime(offer.slices[0].segments[0].arriving_at)}</b>
-                    <span className="text-muted mt-2">
-                      {offer.slices[0].segments[0].destination.iata_code}
+                      <div className="d-flex w-100">
+                        <div className="flight-line my-2" />
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          className="flight-line-plane ms-2"
+                        >
+                          <path d="M8.5 22V20.5L10.5 19V13.5L2 16V14L10.5 9V3.5C10.5 3.06667 10.6417 2.70833 10.925 2.425C11.2083 2.14167 11.5667 2 12 2C12.4333 2 12.7917 2.14167 13.075 2.425C13.3583 2.70833 13.5 3.06667 13.5 3.5V9L22 14V16L13.5 13.5V19L15.5 20.5V22L12 21L8.5 22Z"></path>
+                        </svg>
+                      </div>
+
+                      <small className="text-muted">Direct</small>
+                    </div>
+
+                    <div className="d-flex flex-column ms-3">
+                      <b>{toTime(offer.slices[0].segments[0].arriving_at)}</b>
+                      <span className="text-muted mt-2">
+                        {offer.slices[0].segments[0].destination.iata_code}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-sm-4 rounded-3 pe-active border border-2 border-dark p-3">
+                <div className="d-flex justify-content-between align-items-start">
+                  <div className="d-flex flex-column">
+                    <span className="text-muted">
+                      {capitalize(
+                        offer.slices[0].segments[0].passengers[0].cabin_class
+                      ).replaceAll("_", " ")}
                     </span>
+                    <p className="fw-bold">{offer.slices[0].fare_brand_name}</p>
+                  </div>
+
+                  <Form.Check type="radio" checked={true} onChange={() => {}} />
+                </div>
+
+                <hr />
+
+                <ul className="list-unstyled mb-3">
+                  <li className="mb-3">
+                    <small className="text-muted d-flex align-items-center">
+                      <CloseSquare className="me-2" size={18} /> Not changeable
+                    </small>
+                  </li>
+
+                  <li className="mb-3">
+                    <small className="text-muted d-flex align-items-center">
+                      <CloseSquare className="me-2" size={18} /> Not refundable
+                    </small>
+                  </li>
+
+                  <li className="mb-3">
+                    <small className="d-flex align-items-center">
+                      <Clock className="me-2" size={18} variant="Bulk" /> Hold
+                      price & space
+                    </small>
+                  </li>
+
+                  <li className="mb-3">
+                    <small className="d-flex align-items-center">
+                      <Bag className="me-2" size={18} variant="Bulk" /> Includes
+                      carry-on bags
+                    </small>
+                  </li>
+
+                  <li>
+                    <small className="d-flex align-items-center">
+                      <ShoppingBag className="me-2" size={18} variant="Bulk" />
+                      Includes checked bags
+                    </small>
+                  </li>
+                </ul>
+
+                <div
+                  className="rounded-3 border-0 alert alert-dark m-0"
+                  style={{ background: "#f9f8fc" }}
+                >
+                  Total amount
+                  <h5 className="mb-0 text-black">
+                    {toCurrency(
+                      add20Percent(offer.total_amount),
+                      offer.total_currency
+                    )}
+                  </h5>
+                </div>
+              </div>
+            </>
+
+            {isReturn && (
+              <>
+                <div className="my-5">
+                  <div className="mb-2">
+                    <span className="fw-bold alert alert-success rounded-pill p-2">
+                      Inbound
+                    </span>
+                    <br />
+                    <br />
+                    Flight from
+                    <b className="ms-2">
+                      {offer.slices[1].segments[0].origin.iata_code}
+                    </b>
+                    <small className="text-muted ms-2">
+                      ({offer.slices[1].segments[0].origin.name})
+                    </small>
+                    , Terminal {offer.slices[1].segments[0].origin_terminal}
+                  </div>
+
+                  <div className="mb-2">
+                    To
+                    <b className="ms-2">
+                      {offer.slices[1].segments[0].destination.iata_code}
+                    </b>
+                    <small className="text-muted ms-2">
+                      ({offer.slices[1].segments[0].destination.name})
+                    </small>
+                    , Terminal{" "}
+                    {offer.slices[1].segments[0].destination_terminal}
+                  </div>
+
+                  <div>
+                    On
+                    <b className="text-muted ms-2">
+                      {toFlightTime(offer.slices[1].segments[0].departing_at)}
+                    </b>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="col-sm-4 rounded-3 pe-active border border-2 border-dark p-3">
-              <div className="d-flex justify-content-between align-items-start">
-                <div className="d-flex flex-column">
-                  <span className="text-muted">
-                    {capitalize(
-                      offer.slices[0].segments[0].passengers[0].cabin_class
-                    ).replaceAll("_", " ")}
-                  </span>
-                  <p className="fw-bold">{offer.slices[0].fare_brand_name}</p>
+                <div className="mb-5">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex flex-column me-3">
+                      <Image
+                        src={offer.owner.logo_symbol_url}
+                        width={46}
+                        height={46}
+                        priority
+                        alt="airline"
+                        className="img-responsive mb-2"
+                      />
+                      <small>{offer.owner.name}</small>
+                    </div>
+
+                    <div className="d-flex justify-content-between align-items-center w-100">
+                      <div className="d-flex flex-column me-3">
+                        <b>
+                          {toTime(offer.slices[1].segments[0].departing_at)}
+                        </b>
+                        <span className="text-muted mt-2">
+                          {offer.slices[1].segments[0].origin.iata_code}
+                        </span>
+                      </div>
+
+                      <div className="d-flex flex-column align-items-center w-100">
+                        <small className="text-muted">
+                          {toDuration(offer.slices[1].duration)}
+                        </small>
+
+                        <div className="d-flex w-100">
+                          <div className="flight-line my-2" />
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            className="flight-line-plane ms-2"
+                          >
+                            <path d="M8.5 22V20.5L10.5 19V13.5L2 16V14L10.5 9V3.5C10.5 3.06667 10.6417 2.70833 10.925 2.425C11.2083 2.14167 11.5667 2 12 2C12.4333 2 12.7917 2.14167 13.075 2.425C13.3583 2.70833 13.5 3.06667 13.5 3.5V9L22 14V16L13.5 13.5V19L15.5 20.5V22L12 21L8.5 22Z"></path>
+                          </svg>
+                        </div>
+
+                        <small className="text-muted">Direct</small>
+                      </div>
+
+                      <div className="d-flex flex-column ms-3">
+                        <b>{toTime(offer.slices[1].segments[0].arriving_at)}</b>
+                        <span className="text-muted mt-2">
+                          {offer.slices[1].segments[0].destination.iata_code}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <Form.Check type="radio" checked={true} onChange={() => {}} />
-              </div>
+                <div className="col-sm-4 rounded-3 pe-active border border-2 border-dark p-3">
+                  <div className="d-flex justify-content-between align-items-start">
+                    <div className="d-flex flex-column">
+                      <span className="text-muted">
+                        {capitalize(
+                          offer.slices[1].segments[0].passengers[0].cabin_class
+                        ).replaceAll("_", " ")}
+                      </span>
+                      <p className="fw-bold">
+                        {offer.slices[1].fare_brand_name}
+                      </p>
+                    </div>
 
-              <hr />
+                    <Form.Check
+                      type="radio"
+                      checked={true}
+                      onChange={() => {}}
+                    />
+                  </div>
 
-              <ul className="list-unstyled mb-3">
-                <li className="mb-3">
-                  <small className="text-muted d-flex align-items-center">
-                    <CloseSquare className="me-2" size={18} /> Not changeable
-                  </small>
-                </li>
+                  <hr />
 
-                <li className="mb-3">
-                  <small className="text-muted d-flex align-items-center">
-                    <CloseSquare className="me-2" size={18} /> Not refundable
-                  </small>
-                </li>
+                  <ul className="list-unstyled mb-3">
+                    <li className="mb-3">
+                      <small className="text-muted d-flex align-items-center">
+                        <CloseSquare className="me-2" size={18} /> Not
+                        changeable
+                      </small>
+                    </li>
 
-                <li className="mb-3">
-                  <small className="d-flex align-items-center">
-                    <Clock className="me-2" size={18} variant="Bulk" /> Hold
-                    price & space
-                  </small>
-                </li>
+                    <li className="mb-3">
+                      <small className="text-muted d-flex align-items-center">
+                        <CloseSquare className="me-2" size={18} /> Not
+                        refundable
+                      </small>
+                    </li>
 
-                <li className="mb-3">
-                  <small className="d-flex align-items-center">
-                    <Bag className="me-2" size={18} variant="Bulk" /> Includes
-                    carry-on bags
-                  </small>
-                </li>
+                    <li className="mb-3">
+                      <small className="d-flex align-items-center">
+                        <Clock className="me-2" size={18} variant="Bulk" /> Hold
+                        price & space
+                      </small>
+                    </li>
 
-                <li>
-                  <small className="d-flex align-items-center">
-                    <ShoppingBag className="me-2" size={18} variant="Bulk" />{" "}
-                    Includes checked bags
-                  </small>
-                </li>
-              </ul>
+                    <li className="mb-3">
+                      <small className="d-flex align-items-center">
+                        <Bag className="me-2" size={18} variant="Bulk" />
+                        Includes carry-on bags
+                      </small>
+                    </li>
 
-              <div
-                className="rounded-3 border-0 alert alert-dark m-0"
-                style={{ background: "#f9f8fc" }}
-              >
-                Total amount
-                <h5 className="mb-0 text-black">
-                  {toCurrency(
-                    add20Percent(offer.total_amount),
-                    offer.total_currency
-                  )}
-                </h5>
-              </div>
-            </div>
+                    <li>
+                      <small className="d-flex align-items-center">
+                        <ShoppingBag
+                          className="me-2"
+                          size={18}
+                          variant="Bulk"
+                        />
+                        Includes checked bags
+                      </small>
+                    </li>
+                  </ul>
+
+                  <div
+                    className="rounded-3 border-0 alert alert-dark m-0"
+                    style={{ background: "#f9f8fc" }}
+                  >
+                    Total amount
+                    <h5 className="mb-0 text-black">
+                      {toCurrency(
+                        add20Percent(offer.total_amount),
+                        offer.total_currency
+                      )}
+                    </h5>
+                  </div>
+                </div>
+              </>
+            )}
 
             <h4 className="mt-5 mb-4">Checkout</h4>
 
@@ -559,14 +753,14 @@ const FlightOffer = ({ id }) => {
               <ul className="list-unstyled">
                 <li className="mb-3">
                   <small className="d-flex align-items-center">
-                    <CloseSquare className="me-2" size={18} variant="Bulk" />{" "}
+                    <CloseSquare className="me-2" size={18} variant="Bulk" />
                     Not changeable
                   </small>
                 </li>
 
                 <li className="mb-3">
                   <small className="d-flex align-items-center">
-                    <CloseSquare className="me-2" size={18} variant="Bulk" />{" "}
+                    <CloseSquare className="me-2" size={18} variant="Bulk" />
                     Not refundable
                   </small>
                 </li>
@@ -594,14 +788,14 @@ const FlightOffer = ({ id }) => {
 
                 <li className="mb-3">
                   <small className="d-flex align-items-center">
-                    <ShoppingBag className="me-2" size={18} variant="Bulk" />{" "}
+                    <ShoppingBag className="me-2" size={18} variant="Bulk" />
                     Includes checked bags
                   </small>
                 </li>
 
                 <li>
                   <small className="d-flex align-items-center">
-                    <Cloud className="me-2" size={18} variant="Bulk" />{" "}
+                    <Cloud className="me-2" size={18} variant="Bulk" />
                     {offer.total_emissions_kg}kg CO2
                   </small>
                 </li>
