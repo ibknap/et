@@ -345,7 +345,7 @@ const FlightSearch = () => {
                         </label>
 
                         <input
-                          inputmode="numeric"
+                          inputMode="numeric"
                           pattern="[0-9]*"
                           type="number"
                           min="0"
@@ -369,7 +369,7 @@ const FlightSearch = () => {
                         </label>
 
                         <input
-                          inputmode="numeric"
+                          inputMode="numeric"
                           pattern="[0-9]*"
                           type="number"
                           min="0"
