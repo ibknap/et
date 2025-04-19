@@ -26,6 +26,7 @@ import {
 import Loader from "../loader";
 
 const FlightOffer = ({ id }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [offer, setOffer] = useState(null);
   const [passengerDetails, setPassengerDetails] = useState({});
   const [email, setEmail] = useState("");
@@ -68,6 +69,7 @@ const FlightOffer = ({ id }) => {
   const onShowPaypal = (e) => {
     e.preventDefault();
     setShowPaypal(true);
+    setIsLoading(true);
   };
 
   const onPaypalCreateOrder = async () => {
@@ -77,7 +79,7 @@ const FlightOffer = ({ id }) => {
         purchase_units: [
           {
             amount: {
-              currency_code: offer.total_currency,
+              currency_code: "USD",
               value: add20Percent(offer.total_amount),
             },
           },
@@ -114,8 +116,7 @@ const FlightOffer = ({ id }) => {
         toast.error(errorMessage);
       }
     } catch (error) {
-      console.log(error);
-
+      setIsLoading(false);
       toast.error(`Could not initiate PayPal Checkout...${error}`);
     }
   };
@@ -136,15 +137,39 @@ const FlightOffer = ({ id }) => {
       const order = resJson.data;
 
       if (order.status === "COMPLETED") {
-        toast.success(
-          "Payment completed. You will receive your Itinerary in your email."
-        );
+        const ticket = {
+          email,
+          phone,
+          passengers: passengerDetails,
+          total_amount: offer.total_amount,
+          total_currency: offer.total_currency,
+        };
+
+        const resEmail = await fetch("/api/email/send_flight", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ticket }),
+        });
+
+        const resEmailJson = await resEmail.json();
+        const emailData = resEmailJson.data;
+
+        if (emailData) {
+          setIsLoading(false);
+          toast.success(
+            "Payment completed. You will receive your Itinerary in your email."
+          );
+        }
       } else {
+        setIsLoading(false);
         toast.error(
           `Sorry, your transaction could not be processed...${error}`
         );
       }
     } catch (error) {
+      setIsLoading(false);
       toast.error(`Sorry, your transaction could not be processed...${error}`);
     }
   };
