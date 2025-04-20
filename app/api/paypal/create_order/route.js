@@ -4,8 +4,6 @@ import { base, genPaypalAccessToken } from "@/app/_utils/paypal";
 export async function POST(req) {
   const { info } = await req.json();
 
-  console.log(`${base}/v2/checkout/orders`);
-
   try {
     const accessToken = await genPaypalAccessToken();
     const res = await fetch(`${base}/v2/checkout/orders`, {

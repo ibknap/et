@@ -18,7 +18,6 @@ export async function POST(req) {
     const data = res.data;
     return NextResponse.json({ data }, { status: 200 });
   } catch (error) {
-    console.error("Error fetching place:", error);
     return NextResponse.json(
       { error: error.message || "Internal Server Error" },
       { status: 500 }

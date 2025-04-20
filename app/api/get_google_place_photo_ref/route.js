@@ -21,7 +21,6 @@ export async function POST(req) {
 
     return NextResponse.json({ photoRef }, { status: 200 });
   } catch (error) {
-    console.error("Error fetching google photo ref:", error);
     return NextResponse.json(
       { error: error.message || "Internal Server Error" },
       { status: 500 }

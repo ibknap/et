@@ -6,7 +6,6 @@ export async function POST(req) {
 
   try {
     const accessToken = await genPaypalAccessToken();
-    console.log(data.orderID);
 
     const res = await fetch(
       `${base}/v2/checkout/orders/${data.orderID}/capture`,
@@ -25,7 +24,6 @@ export async function POST(req) {
     }
 
     const order = await res.json();
-    console.log(order);
     const errorDetail = order?.details?.[0];
     if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
       return actions.restart();
@@ -35,12 +33,6 @@ export async function POST(req) {
         { status: 500 }
       );
     } else {
-      const transaction = order.purchase_units[0].payments.captures[0];
-
-      console.log(
-        `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`
-      );
-      console.log("Capture result", order, JSON.stringify(order, null, 2));
       return NextResponse.json({ data: order }, { status: 200 });
     }
   } catch (error) {

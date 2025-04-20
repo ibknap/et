@@ -17,7 +17,6 @@ export async function POST(req) {
 
     return NextResponse.json({ data }, { status: 200 });
   } catch (error) {
-    console.error("Error fetching google details:", error);
     return NextResponse.json(
       { error: error.message || "Internal Server Error" },
       { status: 500 }

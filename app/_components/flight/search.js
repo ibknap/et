@@ -55,9 +55,7 @@ const FlightSearch = () => {
         const airport = resJson.data;
 
         setSearchOrigin(airport);
-      } catch (error) {
-        console.error("Error getting origin airport:", error);
-      }
+      } catch (error) {}
     } else {
       setSearchOrigin(null);
     }
@@ -77,9 +75,7 @@ const FlightSearch = () => {
         const airport = resJson.data;
 
         setSearchDestination(airport);
-      } catch (error) {
-        console.error("Error getting destination airport:", error);
-      }
+      } catch (error) {}
     } else {
       setSearchDestination(null);
     }
@@ -127,7 +123,6 @@ const FlightSearch = () => {
       setOffers(offers);
       setIsLoading(false);
     } catch (error) {
-      console.error("Error getting flight offers:", error);
       setIsLoading(false);
     }
   };

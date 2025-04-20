@@ -20,7 +20,6 @@ export async function POST(req) {
     const placeId = jsonRes.results[0].place_id;
     return NextResponse.json({ placeId }, { status: 200 });
   } catch (error) {
-    console.error("Error fetching google place_id:", error);
     return NextResponse.json(
       { error: error.message || "Internal Server Error" },
       { status: 500 }

@@ -25,6 +25,13 @@ import {
 } from "@paypal/react-paypal-js";
 import Loader from "../loader";
 
+function convertPassengers(passengersObj) {
+  return Object.entries(passengersObj).map(([id, details]) => ({
+    id,
+    ...details,
+  }));
+}
+
 const FlightOffer = ({ id }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [offer, setOffer] = useState(null);
@@ -56,11 +63,13 @@ const FlightOffer = ({ id }) => {
     }
   }, [id]);
 
-  const onPassengerChange = (id, field, value) => {
+  const onPassengerChange = (type, age, id, field, value) => {
     setPassengerDetails((prev) => ({
       ...prev,
       [id]: {
         ...prev[id],
+        type: type,
+        age: age,
         [field]: value,
       },
     }));
@@ -68,8 +77,14 @@ const FlightOffer = ({ id }) => {
 
   const onShowPaypal = (e) => {
     e.preventDefault();
-    setShowPaypal(true);
-    setIsLoading(true);
+
+    const hasPlus = phone.includes("+");
+    if (!hasPlus) {
+      toast.error("Phone number must be in international format with +");
+    } else {
+      setShowPaypal(true);
+      setIsLoading(true);
+    }
   };
 
   const onPaypalCreateOrder = async () => {
@@ -79,7 +94,7 @@ const FlightOffer = ({ id }) => {
         purchase_units: [
           {
             amount: {
-              currency_code: "USD",
+              currency_code: offer.total_currency,
               value: add20Percent(offer.total_amount),
             },
           },
@@ -138,10 +153,12 @@ const FlightOffer = ({ id }) => {
 
       if (order.status === "COMPLETED") {
         const ticket = {
+          isReturn,
+          offer,
           email,
           phone,
-          passengers: passengerDetails,
-          total_amount: offer.total_amount,
+          passengers: convertPassengers(passengerDetails),
+          total_amount: add20Percent(offer.total_amount),
           total_currency: offer.total_currency,
         };
 
@@ -156,7 +173,7 @@ const FlightOffer = ({ id }) => {
         const resEmailJson = await resEmail.json();
         const emailData = resEmailJson.data;
 
-        if (emailData) {
+        if (emailData === "done") {
           setIsLoading(false);
           toast.success(
             "Payment completed. You will receive your Itinerary in your email."
@@ -656,12 +673,15 @@ const FlightOffer = ({ id }) => {
                         className="form-control cus-form-control"
                         onChange={(e) =>
                           onPassengerChange(
+                            passenger.type,
+                            passenger.age,
                             passenger.id,
                             "title",
                             e.target.value
                           )
                         }
                       >
+                        <option value="">Select</option>
                         <option value="mr">Mr.</option>
                         <option value="ms">Ms.</option>
                         <option value="mrs">Mrs.</option>
@@ -683,6 +703,8 @@ const FlightOffer = ({ id }) => {
                         className="form-control cus-form-control"
                         onChange={(e) =>
                           onPassengerChange(
+                            passenger.type,
+                            passenger.age,
                             passenger.id,
                             "givenName",
                             e.target.value
@@ -704,6 +726,8 @@ const FlightOffer = ({ id }) => {
                         className="form-control cus-form-control"
                         onChange={(e) =>
                           onPassengerChange(
+                            passenger.type,
+                            passenger.age,
                             passenger.id,
                             "familyName",
                             e.target.value
@@ -725,7 +749,13 @@ const FlightOffer = ({ id }) => {
                         max={new Date().toISOString().split("T")[0]}
                         className="form-control cus-form-control"
                         onChange={(e) =>
-                          onPassengerChange(passenger.id, "dob", e.target.value)
+                          onPassengerChange(
+                            passenger.type,
+                            passenger.age,
+                            passenger.id,
+                            "dob",
+                            e.target.value
+                          )
                         }
                       />
                     </div>
@@ -740,6 +770,8 @@ const FlightOffer = ({ id }) => {
                         className="form-control cus-form-control"
                         onChange={(e) =>
                           onPassengerChange(
+                            passenger.type,
+                            passenger.age,
                             passenger.id,
                             "gender",
                             e.target.value
@@ -768,6 +800,8 @@ const FlightOffer = ({ id }) => {
                         className="form-control cus-form-control"
                         onChange={(e) =>
                           onPassengerChange(
+                            passenger.type,
+                            passenger.age,
                             passenger.id,
                             "country",
                             e.target.value
@@ -797,6 +831,8 @@ const FlightOffer = ({ id }) => {
                         className="form-control cus-form-control"
                         onChange={(e) =>
                           onPassengerChange(
+                            passenger.type,
+                            passenger.age,
                             passenger.id,
                             "passportNumber",
                             e.target.value
@@ -819,6 +855,8 @@ const FlightOffer = ({ id }) => {
                         className="form-control cus-form-control"
                         onChange={(e) =>
                           onPassengerChange(
+                            passenger.type,
+                            passenger.age,
                             passenger.id,
                             "expDate",
                             e.target.value
@@ -852,7 +890,7 @@ const FlightOffer = ({ id }) => {
                 required
                 className="form-control cus-form-control"
                 id="phoneNumber"
-                placeholder="Enter phone number (+1 234 567 8901)"
+                placeholder="eg: (+1 234 567 8901)"
                 onChange={(e) => setPhoneNumber(e.target.value)}
               />
             </div>
@@ -968,6 +1006,7 @@ const FlightOffer = ({ id }) => {
                   <PayPalScriptProvider
                     options={{
                       clientId: process.env.NEXT_PUBLIC_PAYPAL_TEST_CLIENT_ID,
+                      currency: offer.total_currency,
                     }}
                   >
                     <PaypalLoadingState />
@@ -981,6 +1020,7 @@ const FlightOffer = ({ id }) => {
                 </div>
               ) : (
                 <button
+                  disabled={isLoading}
                   type="submit"
                   className="btn btn-sm btn-dark mt-4 w-100"
                 >
