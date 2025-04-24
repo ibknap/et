@@ -1,8 +1,8 @@
 const { toast } = require("react-toastify");
 
-export const base = process.env.PAYPAL_TEST_URL;
-const clientId = process.env.PAYPAL_TEST_CLIENT_ID;
-const clientSecret = process.env.PAYPAL_TEST_CLIENT_SECRET;
+export const base = process.env.PAYPAL_LIVE_URL;
+const clientId = process.env.PAYPAL_LIVE_CLIENT_ID;
+const clientSecret = process.env.PAYPAL_LIVE_CLIENT_SECRET;
 
 export async function paypalResponse(res) {
   if (res.ok) {

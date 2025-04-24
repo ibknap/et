@@ -1005,7 +1005,7 @@ const FlightOffer = ({ id }) => {
                 <div className="mt-4">
                   <PayPalScriptProvider
                     options={{
-                      clientId: process.env.NEXT_PUBLIC_PAYPAL_TEST_CLIENT_ID,
+                      clientId: process.env.NEXT_PUBLIC_PAYPAL_LIVE_CLIENT_ID,
                       currency: offer.total_currency,
                     }}
                   >
