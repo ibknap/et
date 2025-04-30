@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { Duffel } from "@duffel/api";
 
 export async function POST(req) {
-  const duffel = new Duffel({ token: process.env.DUFFEL_TEST_API_KEY });
+  const duffel = new Duffel({ token: process.env.DUFFEL_LIVE_API_KEY });
 
   // Helpers
   const randomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];

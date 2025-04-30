@@ -3,7 +3,7 @@ import { Duffel } from "@duffel/api";
 
 export async function POST(req) {
   const { info } = await req.json();
-  const duffel = new Duffel({ token: process.env.DUFFEL_TEST_API_KEY });
+  const duffel = new Duffel({ token: process.env.DUFFEL_LIVE_API_KEY });
 
   const getAdults = () => {
     return Array.from({ length: parseInt(info.adults) }, () => ({
