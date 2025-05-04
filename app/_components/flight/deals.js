@@ -86,10 +86,7 @@ const FlightDeals = () => {
                       </div>
 
                       <span className="fw-bold">
-                        {toCurrency(
-                          add20Percent(flight.total_amount),
-                          flight.total_currency
-                        )}
+                        {toCurrency(flight.total_amount, flight.total_currency)}
                       </span>
                     </div>
 

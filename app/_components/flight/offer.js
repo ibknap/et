@@ -95,7 +95,7 @@ const FlightOffer = ({ id }) => {
           {
             amount: {
               currency_code: offer.total_currency,
-              value: add20Percent(offer.total_amount),
+              value: offer.total_amount,
             },
           },
         ],
@@ -158,7 +158,7 @@ const FlightOffer = ({ id }) => {
           email,
           phone,
           passengers: convertPassengers(passengerDetails),
-          total_amount: add20Percent(offer.total_amount),
+          total_amount: offer.total_amount,
           total_currency: offer.total_currency,
         };
 
@@ -370,10 +370,7 @@ const FlightOffer = ({ id }) => {
                 >
                   Total amount
                   <h5 className="mb-0 text-black">
-                    {toCurrency(
-                      add20Percent(offer.total_amount),
-                      offer.total_currency
-                    )}
+                    {toCurrency(offer.total_amount, offer.total_currency)}
                   </h5>
                 </div>
               </div>
@@ -541,10 +538,7 @@ const FlightOffer = ({ id }) => {
                   >
                     Total amount
                     <h5 className="mb-0 text-black">
-                      {toCurrency(
-                        add20Percent(offer.total_amount),
-                        offer.total_currency
-                      )}
+                      {toCurrency(offer.total_amount, offer.total_currency)}
                     </h5>
                   </div>
                 </div>
@@ -975,28 +969,19 @@ const FlightOffer = ({ id }) => {
                 <div className="d-flex justify-content-between mb-2">
                   Fare
                   <b className="ms-2">
-                    {toCurrency(
-                      add20Percent(offer.base_amount),
-                      offer.base_currency
-                    )}
+                    {toCurrency(offer.base_amount, offer.base_currency)}
                   </b>
                 </div>
                 <div className="d-flex justify-content-between mb-2">
                   Fare Tax
                   <b className="ms-2">
-                    {toCurrency(
-                      add20Percent(offer.tax_amount),
-                      offer.tax_currency
-                    )}
+                    {toCurrency(offer.tax_amount, offer.tax_currency)}
                   </b>
                 </div>
                 <div className="d-flex justify-content-between mb-2">
                   TOTAL ({offer.total_currency})
                   <h5 className="mb-0 text-danger">
-                    {toCurrency(
-                      add20Percent(offer.total_amount),
-                      offer.total_currency
-                    )}
+                    {toCurrency(offer.total_amount, offer.total_currency)}
                   </h5>
                 </div>
               </div>

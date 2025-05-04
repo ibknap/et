@@ -614,7 +614,7 @@ const FlightSearch = () => {
 
                             <h5 className="fw-bold text-danger">
                               {toCurrency(
-                                add20Percent(offer.total_amount),
+                                offer.total_amount,
                                 offer.total_currency
                               )}
                             </h5>
